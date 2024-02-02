@@ -1,0 +1,47 @@
+#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "init.el") :lexical t
+
+#+begin_src emacs-lisp
+  ;;; init.el --- The main init entry for Emacs -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+  ;;; Code:
+
+  (let ((dir (locate-user-emacs-file "elisp")))
+    (add-to-list 'load-path (file-name-as-directory dir)))
+
+  (require 'package)
+  (setq package-archives
+        '(("melpa" . "https://melpa.org/packages/")
+          ("gnu" . "https://elpa.gnu.org/packages/")
+          ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+
+  (package-initialize)
+
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+  (setq use-package-always-ensure t
+        use-package-always-defer t
+        use-package-expand-minimally t
+        use-package-enable-imenu-support t)
+
+  (use-package use-package-ensure-system-package :ensure t)
+  (use-package diminish :ensure t)
+  (use-package bind-key :ensure t)
+
+  (use-package quelpa
+    :commands quelpa
+    :config
+    :custom
+    (quelpa-git-clone-depth 1)
+    (quelpa-update-melpa-p nil)
+    (quelpa-self-upgrade-p nil)
+    (quelpa-checkout-melpa-p nil))
+
+  (use-package quelpa-use-package)
+
+  (provide 'init)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;; init.el ends here
+#+end_src

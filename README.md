@@ -14,6 +14,7 @@ I'm using `Centaur Emacs` for a few years, is time to building my own configured
 ```sh
 mv ~/.emacs.d ~/.emacs.d.bak
 git clone https://github.com/mowind/.emacs.d ~/.emacs.d
+cd ~/.emacs.d && make generate
 ```
 
 ## Update
