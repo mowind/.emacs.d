@@ -1,7 +1,5 @@
 # .emacs.d
 
-I'm using `Centaur Emacs` for a few years, is time to building my own configured for emacs.
-
 ## Features
 
 * Using lsp-bridge as the only lsp client
