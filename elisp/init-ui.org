@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:emacs-lisp :tangle (concat temporary-file-directory "elisp/init-ui.el") :lexical t
+#+PROPERTY: header-args:emacs-lisp :tangle init-ui.el :lexical t
 #+TITLE: init-ui.el
 
 * init-ui.el 文件头
@@ -147,7 +147,7 @@
         (add-to-list 'default-frame-alist (cons 'top top))
         (add-to-list 'default-frame-alist (cons 'left left))
         (add-to-list 'default-frame-alist (cons 'height height))
-        (add-to-list 'default-frame-alist (cons 'width width))))
+        (add-to-list 'default-frame-alist (cons 'width width)))))
 #+end_src
 * 其他UI设置
 #+begin_src emacs-lisp
@@ -287,7 +287,7 @@
 #+end_src
 * modeline设置
 ** doom-modeline插件
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (use-package doom-modeline
     :hook (after-init . doom-modeline-mode)
     :custom
@@ -301,12 +301,12 @@
     (doom-modeline-enable-word-count nil))
 #+end_src
 ** minions插件
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (use-package minions
     :hook (doom-modeling-mode . minions-mode))
 #+end_src
 ** icons
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (use-package nerd-icons
     :config
     (when (and (display-graphic-p)
@@ -315,7 +315,7 @@
 #+end_src
 ** keycast
 keycast 插件可以在modeline上展示所有的按键，以及对应的函数。
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (use-package keycast
     :hook (doom-modeline-mode . keycast-mode)
     :config
@@ -347,7 +347,7 @@ keycast 插件可以在modeline上展示所有的按键，以及对应的函数�
 #+end_src
 * shackle窗口管理
 shackle 插件能够自定义窗口的弹出方式。
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (use-package shackle
     :hook (after-init . shackle-mode)
     :init
@@ -370,7 +370,7 @@ shackle 插件能够自定义窗口的弹出方式。
     )
 #+end_src
 * popper窗口弹出管理
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (use-package popper
     :bind (("M-`"     . popper-toggle-latest)
            ("M-<tab>" . popper-cycle)
@@ -407,7 +407,7 @@ shackle 插件能够自定义窗口的弹出方式。
     )
 #+end_src
 * init-ui.el 文件尾
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (provide 'init-ui)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;; init-ui.el ends here

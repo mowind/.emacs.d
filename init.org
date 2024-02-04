@@ -6,9 +6,6 @@
 
   ;;; Code:
 
-  (let ((dir (locate-user-emacs-file "elisp")))
-    (add-to-list 'load-path (file-name-as-directory dir)))
-
   (require 'package)
   (setq package-archives
         '(("melpa" . "https://melpa.org/packages/")
@@ -40,6 +37,9 @@
     (quelpa-checkout-melpa-p nil))
 
   (use-package quelpa-use-package)
+
+  (let ((dir (locate-user-emacs-file "elisp")))
+    (add-to-list 'load-path (file-name-as-directory dir)))
 
   (require 'init-ui)
 
