@@ -41,6 +41,8 @@
 
   (use-package quelpa-use-package)
 
+  (require 'init-ui)
+
   (provide 'init)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;; init.el ends here
