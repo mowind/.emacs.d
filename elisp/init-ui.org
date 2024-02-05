@@ -406,6 +406,34 @@ shackle 插件能够自定义窗口的弹出方式。
     (setq popper-display-control nil)
     )
 #+end_src
+* posframe
+#+begin_src emacs-lisp :tangle yes
+  (when (not (or noninteractive
+                 emacs-basic-display
+                 (not (display-graphic-p))))
+    (use-package posframe
+      :hook (after-load-theme . posframe-delete-all)
+      :init
+      (defface posframe-border
+        '((t (:inhibit region)))
+        "Face used by the `posframe' border."
+        :group 'posframe)
+      (defvar posframe-border-width 2
+        "Default posframe border width.")
+      :config
+      (with-no-warnings
+        (defun my-posframe--prettify-frame (&rest_)
+          (set-face-background 'fringe nil posframe--frame))
+        (advice-add #'posframe--create-posframe :after #'my-posframe--prettify-frame)
+
+        (defun posframe-poshandler-frame-center-near-bottom (info)
+          (cons (/ (- (plist-get info :parent-frame-width)
+                      (plist-get info :posframe-width))
+                   2)
+                (/ (+ (plist-get info :parent-frame-height)
+                      (* 2 (plist-get info :font-height)))
+                   2))))))
+#+end_src
 * init-ui.el 文件尾
 #+begin_src emacs-lisp
   (provide 'init-ui)
