@@ -17,7 +17,10 @@ init-ui.el: elisp/init-ui.org
 init-base.el: elisp/init-base.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
 
-generate: early-init.el init.el init-ui.el init-base.el
+init-completion.el:elisp/init-completion.org
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+
+generate: early-init.el init.el init-ui.el init-base.el init-completion.el
 
 clean:
-	rm -f init.el early-init.el init-ui.el init-base.el elisp/*.el
+	rm -f init.el early-init.el init-ui.el init-base.el init-completion.el elisp/*.el
