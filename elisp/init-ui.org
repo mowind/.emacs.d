@@ -310,7 +310,7 @@
   (use-package nerd-icons
     :config
     (when (and (display-graphic-p)
-               (not (font-installed-p nerd-icons-font-family)))
+               (not (find-font (font-spec :name nerd-icons-font-family))))
       (nerd-icons-install-fonts t)))
 #+end_src
 ** keycast
@@ -332,12 +332,12 @@ keycast 插件可以在modeline上展示所有的按键，以及对应的函数�
         (setq global-mode-string (delete '("" keycast-mode-line " ") global-mode-string))))
 
     (dolist (input '(self-insert-command org-self-insert-command))
-      (add-to-list 'keycast-substitue-alist '(,input "." "Typing...")))
+      (add-to-list 'keycast-substitute-alist '(,input "." "Typing...")))
 
     (dolist (event '(mouse-event-p
                      mouse-movement-p
                      mwheel-scroll))
-      (add-to-list 'keycast-substitue-alist '(,event nil)))
+      (add-to-list 'keycast-substitute-alist '(,event nil)))
 
     (setq keycast-log-format "%-20K%C\n")
     (setq keycast-log-frame-alist
@@ -422,7 +422,7 @@ shackle 插件能够自定义窗口的弹出方式。
         "Default posframe border width.")
       :config
       (with-no-warnings
-        (defun my-posframe--prettify-frame (&rest_)
+        (defun my-posframe--prettify-frame (&rest _)
           (set-face-background 'fringe nil posframe--frame))
         (advice-add #'posframe--create-posframe :after #'my-posframe--prettify-frame)
 
