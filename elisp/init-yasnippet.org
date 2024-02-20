@@ -1,0 +1,29 @@
+PROPERTY: header-args:emacs-lisp :tangle init-yasnippet.el :lexical t
+#+TITLE: init-yasnippet.el
+
+* init-yasnippet.el 文件头
+#+begin_src emacs-lisp :tangle yes
+  ;;; init-yasnippet.el --- Initialize yasnippet configurations. -*- lexcial-bindint: t -*-
+  ;;; Commentary:
+
+  ;;; Code:
+#+end_src
+
+* yasnippet
+#+begin_src emacs-lisp :tangle yes
+  ;; Yet another snippet extension
+  (use-package yasnippet
+    :diminish yasnippet
+    :hook (after-init . yas-global-mode))
+
+  ;; Collection of yasnippet snippets
+  (use-package yasnippet-snippets)
+#+end_src
+
+* init-yasnippet.el 文件尾
+#+begin_src emacs-lisp :tangle yes
+  (provide 'init-yasnippet)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;; init-yasnippet.el ends here
+#+end_src

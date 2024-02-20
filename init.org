@@ -45,6 +45,7 @@
   (require 'init-ui)
   (require 'init-completion)
   (require 'init-edit)
+  (require 'init-yasnippet)
 
   (provide 'init)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
