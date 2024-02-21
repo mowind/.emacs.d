@@ -13,20 +13,29 @@ init.el: init.org
 
 init-ui.el: elisp/init-ui.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-ui.el
 
 init-base.el: elisp/init-base.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-base.el
 
 init-completion.el:elisp/init-completion.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-completion.el
 
 init-edit.el: elisp/init-edit.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-edit.el
 
 init-yasnippet.el: elisp/init-yasnippet.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-yasnippet.el
 
-generate: early-init.el init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el
+init-markdown.el: elisp/init-markdown.org
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-markdown.el
+
+generate: early-init.el init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el init-markdown.el
 
 clean:
-	rm -f init.el early-init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el elisp/*.el
+	rm -f *.el elisp/*.el

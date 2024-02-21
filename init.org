@@ -46,6 +46,7 @@
   (require 'init-completion)
   (require 'init-edit)
   (require 'init-yasnippet)
+  (require 'init-markdown)
 
   (provide 'init)
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
