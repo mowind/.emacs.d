@@ -1,0 +1,34 @@
+PROPERTY: header-args:emacs-lisp :tangle init-lsp.el :lexical t
+#+TITLE: init-lsp.el
+
+* init-lsp.el 文件头
+
+#+begin_src emacs-lisp :tangle yes
+  ;;; init-lsp.el Lsp bridge configurations. -*- lexcial-binding: t -*-
+  ;;; Commentary:
+
+  ;;; Code:
+#+end_src
+
+* lsp-bridge
+#+begin_src emacs-lisp :tangle yes
+  ;; Lsp bridge
+  (add-to-list 'load-path (expand-file-name "site-lisp/lsp-bridge" user-emacs-directory) t)
+  (require 'lsp-bridge)
+  (setq lsp-bridge-signature-show-function 'lsp-birdge-signature-show-with-frame)
+  (setq lsp-bridge-enable-org-babel t)
+  (setq lsp-bridge-enable-hover-diagnostic t)
+  (setq acm-enable-quick-access t)
+  (setq acm-backend-yas-match-by-trigger-keyword t)
+
+  (global-lsp-bridge-mode)
+#+end_src
+
+* init-lsp.el 文件尾
+
+#+begin_src emacs-lisp :tangle yes
+
+  (provide 'init-lsp)
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;; init-lsp.el ends here
+#+end_src

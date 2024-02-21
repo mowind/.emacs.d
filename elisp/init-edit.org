@@ -234,8 +234,8 @@ PROPERTY: header-args:emacs-lisp :tangle init-edit.el :lexical t
            ("C-|" . mc/vertical-align-with-space)))
 
   ;; Smartly select region, rectangle, multi cursors
-  (use-package smart-region
-    :hook (after-init . smart-region-on))
+  ;;(use-package smart-region
+    ;;:hook (after-init . smart-region-on))
 #+end_src
 
 * flyspell
