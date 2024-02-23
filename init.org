@@ -47,10 +47,11 @@
   (require 'init-base)
   (require 'init-ui)
   (require 'init-completion)
+  (require 'init-edit)
   (require 'init-yasnippet)
   (require 'init-markdown)
   (require 'init-lsp)
-  (require 'init-edit)
+  (require 'init-go)
 
   (provide 'init)
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -39,7 +39,11 @@ init-lsp.el: elisp/init-lsp.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
 	rm -f init-lsp.el
 
-generate: early-init.el init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el init-markdown.el init-lsp.el
+init-go.el: elisp/init-go.org
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-go.el
+
+generate: early-init.el init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el init-markdown.el init-lsp.el init-go.el
 
 clean:
 	rm -f *.el elisp/*.el
