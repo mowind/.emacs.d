@@ -45,14 +45,18 @@
     (add-to-list 'load-path (file-name-as-directory dir)))
 
   (require 'init-base)
+  (require 'init-hydra)
   (require 'init-ui)
   (require 'init-completion)
   (require 'init-edit)
   (require 'init-yasnippet)
+
   (require 'init-markdown)
-  (require 'init-lsp)
-  (require 'init-go)
+  
   (require 'init-vcs)
+  (require 'init-lsp)
+
+  (require 'init-go)
 
   (provide 'init)
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
