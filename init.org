@@ -51,8 +51,10 @@
   (require 'init-edit)
   (require 'init-yasnippet)
 
+  (require 'init-highlight)
+
   (require 'init-markdown)
-  
+
   (require 'init-vcs)
   (require 'init-lsp)
 

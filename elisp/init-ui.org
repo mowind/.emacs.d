@@ -139,7 +139,7 @@
   (when (display-graphic-p)
     (let ((top 0) ; 顶不留空
           (left (/ (x-display-pixel-width) 10)) ; 左边空10%
-          (height (round (* 0.8 ; 窗体宽度为0.8倍的显示高度
+          (height (round (* 0.3 ; 窗体宽度为0.8倍的显示高度
                             (/ (x-display-pixel-height)
                                (frame-char-height))))))
       (let ((width (round (* 2.5 height)))) ; 窗体宽度为2.5倍高度
