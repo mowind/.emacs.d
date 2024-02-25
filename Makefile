@@ -55,7 +55,11 @@ init-hydra.el: elisp/init-hydra.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
 	rm -f init-hydra.el
 
-generate: early-init.el init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el init-markdown.el init-lsp.el init-go.el init-vcs.el init-hydra.el init-highlight.el
+init-prog.el: elisp/init-prog.org
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-prog.el
+
+generate: early-init.el init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el init-markdown.el init-lsp.el init-go.el init-vcs.el init-hydra.el init-highlight.el init-prog.el
 
 clean:
 	rm -f *.el elisp/*.el
