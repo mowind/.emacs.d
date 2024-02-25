@@ -27,19 +27,15 @@
   (use-package diminish :ensure t)
   (use-package bind-key :ensure t)
 
-  (use-package quelpa
-    :commands quelpa
-    :config
-    :custom
-    (quelpa-git-clone-depth 1)
-    (quelpa-update-melpa-p nil)
-    (quelpa-self-upgrade-p nil)
-    (quelpa-checkout-melpa-p nil))
+  (use-package gnu-elpa-keyring-update)
 
-  (use-package quelpa-use-package
-    :demand
-    :config
-    (quelpa-use-package-activate-advice))
+  ;; Update packages
+  (unless (fboundp 'package-upgrade-all)
+    (use-package auto-package-update
+      :init
+      (setq auto-package-update-delete-old-versions t
+            auto-package-update-hide-results t)
+      (defalias 'package-upgrade-all #'auto-package-update-now)))
 
   (let ((dir (locate-user-emacs-file "elisp")))
     (add-to-list 'load-path (file-name-as-directory dir)))
