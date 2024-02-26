@@ -84,8 +84,8 @@ PROPERTY: header-args:emacs-lisp :tangle init-go.el :lexical t
                   ("C-c t c" . go-test-current-coverage)
                   ("C-c t x" . go-run)))
 
-    (use-package go-ts-mode
-      :init (setq go-ts-mode-indent-offset 4)))
+    ;;(use-package go-ts-mode
+    ;;  :init (setq go-ts-mode-indent-offset 4)))
 #+end_src
 
 * init-go.el 文件尾

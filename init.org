@@ -50,6 +50,7 @@
   (require 'init-highlight)
 
   (require 'init-markdown)
+  (require 'init-org)
 
   (require 'init-vcs)
   (require 'init-lsp)

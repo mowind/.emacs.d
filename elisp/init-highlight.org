@@ -72,7 +72,7 @@
       (advice-add #'deactivate-mark :after #'turn-on-symbol-overlay)))
 #+end_src
 * highlight-indent-guides
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
   ;; Highlight indentions
   (use-package highlight-indent-guides
     :diminish
