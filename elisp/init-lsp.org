@@ -22,6 +22,10 @@ PROPERTY: header-args:emacs-lisp :tangle init-lsp.el :lexical t
   (setq acm-backend-yas-match-by-trigger-keyword t)
 
   (global-lsp-bridge-mode)
+
+  (add-hook 'go-ts-mode-hook
+            (lambda ()
+              (setq go-ts-mode-indent-offset 4)))
 #+end_src
 
 * init-lsp.el 文件尾
