@@ -63,7 +63,11 @@ init-org.el: elisp/init-org.org
 	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
 	rm -f init-org.el
 
-generate: early-init.el init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el init-markdown.el init-lsp.el init-go.el init-vcs.el init-hydra.el init-highlight.el init-prog.el init-org.el
+init-solidity.el: elisp/init-solidity.org
+	$(EE) --eval '(org-babel-tangle-publish t "$<" "$(@D)/")'
+	rm -f init-solidity.el
+
+generate: early-init.el init.el init-ui.el init-base.el init-completion.el init-edit.el init-yasnippet.el init-markdown.el init-lsp.el init-go.el init-vcs.el init-hydra.el init-highlight.el init-prog.el init-org.el init-solidity.el
 
 clean:
 	rm -f *.el elisp/*.el

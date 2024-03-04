@@ -9,7 +9,7 @@
   ;;; Code:
 #+end_src
 
-* gc设置
+* gc 设置
 #+begin_src emacs-lisp 
   (use-package gcmh
     :diminish
@@ -27,7 +27,7 @@
       :custom (exec-path-from-shell-arguments '("-l"))
       :init (exec-path-from-shell-initialize)))
 #+end_src
-* no-littering让配置目录简洁
+* no-littering 让配置目录简洁
 #+begin_src emacs-lisp
   (use-package no-littering)
 #+end_src
@@ -144,6 +144,17 @@
         sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
         sentence-end-double-space  nil
         word-wrap-by-category t)
+#+end_src
+* transwin
+#+begin_src emacs-lisp :tangle yes
+  ;; Frame transparence
+  (when (display-graphic-p)
+    (use-package transwin
+      :bind (("C-M-9" . transwin-inc)
+             ("C-M-8" . transwin-dec)
+             ("C-M-7" . transwin-toggle))
+      :init
+      (setq transwin-parameter-alpha 'alpha-background)))
 #+end_src
 * init-base.el 文件尾
 #+begin_src emacs-lisp :tangle yes
