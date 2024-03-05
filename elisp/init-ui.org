@@ -312,7 +312,7 @@
 #+end_src
 ** keycast
 keycast 插件可以在 modeline 上展示所有的按键，以及对应的函数。
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package keycast
     :hook (doom-modeline-mode . keycast-mode)
     :config
