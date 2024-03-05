@@ -10,7 +10,7 @@
   ;;; Code:
 #+end_src
 
-* ef 主题
+* 主题
 #+begin_src emacs-lisp
   (use-package ef-themes
     :bind ("C-c t" . ef-themes-toggle)
@@ -37,6 +37,10 @@
         (ef-themes-load-random)
       (ef-themes-load-random 'dark))
     )
+
+  (use-package doom-themes)
+
+  (use-package modus-themes)
 #+end_src
 
 * 字体设置
@@ -137,17 +141,10 @@
 #+begin_src emacs-lisp
   ;; 设置窗口大小，仅仅在图形界面需要设置
   (when (display-graphic-p)
-    (let ((top 0) ; 顶不留空
-          (left (/ (x-display-pixel-width) 10)) ; 左边空10%
-          (height (round (* 0.3 ; 窗体宽度为0.8倍的显示高度
-                            (/ (x-display-pixel-height)
-                               (frame-char-height))))))
-      (let ((width (round (* 2.5 height)))) ; 窗体宽度为2.5倍高度
-        (setq default-frame-alist nil)
-        (add-to-list 'default-frame-alist (cons 'top top))
-        (add-to-list 'default-frame-alist (cons 'left left))
-        (add-to-list 'default-frame-alist (cons 'height height))
-        (add-to-list 'default-frame-alist (cons 'width width)))))
+    (let ((frame (selected-frame)))
+      (set-frame-width frame (/ (display-pixel-width) 2) nil 'pixelwise)
+      (set-frame-height frame (/ (display-pixel-height) 2) nil 'pixelwise)
+      (set-frame-position frame (/ (display-pixel-width) 4) 0)))
 #+end_src
 * 其他 UI 设置
 #+begin_src emacs-lisp
