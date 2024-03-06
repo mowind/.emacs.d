@@ -81,9 +81,20 @@
 * consult
 #+begin_src emacs-lisp :tangle yes
   (use-package consult
-    :bind (([remap Info-search] . consult-info)
+    :bind (;; C-c bindings in `mod-specific-map'
+           ("C-c h" . consult-history)
+           ("C-c i" . consult-info)
+           ("C-c r" . consult-ripgrep)
+           ("C-." . consult-imenu)
+
+           ([remap Info-search] . consult-info)
            ([remap isearch-forward] . consult-line)
            ([remap recentf-open-files] . consult-recent-file)
+
+           ;; C-x bindings in `ctl-x-map'
+           ("C-x b" . consult-buffer)
+           ("C-x r b" . consult-bookmark)
+           ("C-x p b" . consult-project-buffer)
 
            ;; Minibuffer history
            :map minibuffer-local-map

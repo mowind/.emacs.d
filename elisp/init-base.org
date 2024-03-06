@@ -144,6 +144,9 @@
         sentence-end "\\([。！？]\\|……\\|[.?!][]\"')}]*\\($\\|[ \t]\\)\\)[ \t\n]*"
         sentence-end-double-space  nil
         word-wrap-by-category t)
+
+  (use-package disk-usage)
+  (use-package memory-usage)
 #+end_src
 * transwin
 #+begin_src emacs-lisp :tangle yes
@@ -155,6 +158,63 @@
              ("C-M-7" . transwin-toggle))
       :init
       (setq transwin-parameter-alpha 'alpha-background)))
+#+end_src
+* which-key
+#+begin_src emacs-lisp :tangle yes
+  ;; Display available keybindings in popup
+  (use-package which-key
+    :diminish
+    :bind ("C-h M-m" . which-key-show-major-mode)
+    :hook (after-init . which-key-mode)
+    :init (setq which-key-max-description-length 30
+                which-key-lighter nil
+                which-key-show-remaining-keys t)
+    :config
+    (which-key-add-key-based-replacements "C-c !" "flycheck")
+    (which-key-add-key-based-replacements "C-c &" "yasnippet")
+    (which-key-add-key-based-replacements "C-c @" "hideshow")
+    (which-key-add-key-based-replacements "C-c t" "hl-todo")
+
+    (which-key-add-key-based-replacements "C-x 8" "unicode")
+    (which-key-add-key-based-replacements "C-x 8 e" "emoji")
+    (which-key-add-key-based-replacements "C-x @" "modifior")
+    (which-key-add-key-based-replacements "C-x n" "narrow")
+    (which-key-add-key-based-replacements "C-x r" "rect & bookmark")
+    (which-key-add-key-based-replacements "C-x t" "tab & treemacs")
+    (which-key-add-key-based-replacements "C-x x" "buffer")
+    (which-key-add-key-based-replacements "C-x RET" "coding-system")
+
+    (which-key-add-major-mode-key-based-replacements 'org-mode "C-c \"" "org-plot")
+    (which-key-add-major-mode-key-based-replacements 'org-mode "C-c C-v" "org-babel")
+    (which-key-add-major-mode-key-based-replacements 'org-mode "C-c C-x" "org-misc")
+
+    (which-key-add-major-mode-key-based-replacements 'emacs-lisp-mode "C-c ," "overseer")
+    (which-key-add-major-mode-key-based-replacements 'python-mode "C-c C-t" "python-skeleton")
+
+    (which-key-add-major-mode-key-based-replacements 'markdown-mode "C-c C-a" "markdown-link")
+    (which-key-add-major-mode-key-based-replacements 'markdown-mode "C-c C-c" "markdown-command")
+    (which-key-add-major-mode-key-based-replacements 'markdown-mode "C-c C-s" "markdown-style")
+    (which-key-add-major-mode-key-based-replacements 'markdown-mode "C-c C-t" "markdown-header")
+    (which-key-add-major-mode-key-based-replacements 'markdown-mode "C-c C-x" "markdown-toggle")
+
+    (which-key-add-major-mode-key-based-replacements 'gfm-mode "C-c C-a" "markdown-link")
+    (which-key-add-major-mode-key-based-replacements 'gfm-mode "C-c C-c" "markdown-command")
+    (which-key-add-major-mode-key-based-replacements 'gfm-mode "C-c C-s" "markdown-style")
+    (which-key-add-major-mode-key-based-replacements 'gfm-mode "C-c C-t" "markdown-header")
+    (which-key-add-major-mode-key-based-replacements 'gfm-mode "C-c C-x" "markdown-toggle")
+
+    (use-package which-key-posframe
+      :diminish
+      :functions posframe-poshandler-frame-center-near-bottom
+      :custom-face
+      (which-key-posframe ((t (:inherit tooltip))))
+      (which-key-posframe-border ((t (:inherit posframe-border :background unspecified))))
+      :init
+      (setq which-key-posframe-border-width posframe-border-width
+            which-key-posframe-poshandler #'posframe-poshandler-frame-center-near-bottom
+            which-key-posframe-parameters '((left-fringe . 8)
+                                            (right-fringe .8)))
+      (which-key-posframe-mode 1)))
 #+end_src
 * init-base.el 文件尾
 #+begin_src emacs-lisp :tangle yes
