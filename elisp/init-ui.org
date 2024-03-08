@@ -43,7 +43,10 @@
   (use-package modus-themes)
 #+end_src
 
-* 字体设置
+* 字体设置                                                          :ORDERED:
+:PROPERTIES:
+:ORDERED:  t
+:END:
 
 #+begin_src emacs-lisp
   (use-package fontaine
@@ -54,7 +57,11 @@
 
           fontaine-presets
           '((regular
-             :default-height 140
+             :default-family "Monaspace Neon";;"BlexMono Nerd Font"
+             :fixed-pitch-family "Monaspace Neon" ;;"BlexMono Nerd Font"
+             :variable-pitch-family "Monaspace Neon";; "BlexMono Nerd Font"
+             :italic-family "Monaspace Neon"
+             :default-height 110
              :default-weight regular
              :fixed-pitch-height 1.0
              :variable-pitch-height 1.0
@@ -66,10 +73,10 @@
              :variable-pitch-height 1.05
              )
             (t
-             :default-family "BlexMono Nerd Font"
-             :fixed-pitch-family "BlexMono Nerd Font"
-             :variable-pitch-family "BlexMono Nerd Font"
-             :italic-family "BlexMono Nerd Font"
+             :default-family "Monaspace Neon";;"BlexMono Nerd Font"
+             :fixed-pitch-family "Monaspace Neon" ;;"BlexMono Nerd Font"
+             :variable-pitch-family "Monaspace Neon";; "BlexMono Nerd Font"
+             :italic-family "Monaspace Neon" ;;"BlexMono Nerd Font"
              :variable-pitch-weight normal
              :bold-weight normal
              :italic-slant italic
@@ -97,27 +104,27 @@
        (frame-parameter nil 'font)
        charset
        (font-spec :family
-         (cond
-          ((eq system-type 'darwin)
-           (cond
-            ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
-            ((member "PingFang SC" (font-family-list)) "PingFang SC")
-            ((member "WenQuanYi Zen Hei" (font-family-list)) "WenQuanYi Zen Hei")
-            ((member "Microsoft YaHei" (font-family-list)) "Microsof YaHei")
-            ))
-          ((eq system-type 'gnu/linux)
-           (cond
-            ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
-            ((member "PingFang SC" (font-family-list)) "PingFang SC")
-            ((member "WenQuanYi Zen Hei" (font-family-list)) "WenQuanYi Zen Hei")
-            ((member "Microsoft YaHei" (font-family-list)) "Microsof YaHei")
-            ))
-          (t
-           (cond
-            ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
-            ((member "Microsofe YaHei" (font-family-list)) "Mircosoft YaHei")
-            )))
-         )))
+                  (cond
+                   ((eq system-type 'darwin)
+                    (cond
+                     ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
+                     ((member "PingFang SC" (font-family-list)) "PingFang SC")
+                     ((member "WenQuanYi Zen Hei" (font-family-list)) "WenQuanYi Zen Hei")
+                     ((member "Microsoft YaHei" (font-family-list)) "Microsof YaHei")
+                     ))
+                   ((eq system-type 'gnu/linux)
+                    (cond
+                     ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
+                     ((member "PingFang SC" (font-family-list)) "PingFang SC")
+                     ((member "WenQuanYi Zen Hei" (font-family-list)) "WenQuanYi Zen Hei")
+                     ((member "Microsoft YaHei" (font-family-list)) "Microsof YaHei")
+                     ))
+                   (t
+                    (cond
+                     ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
+                     ((member "Microsofe YaHei" (font-family-list)) "Mircosoft YaHei")
+                     )))
+                  )))
 
     ;; set Chinese font scale
     (setq face-font-rescale-alist '(
@@ -131,7 +138,9 @@
                                     ("Yuanti SC"           . 1.16)
                                     ("Apple Color Emoji"   . 0.91)
                                     ))
-    )
+
+    (add-hook 'window-setup-hook #'fontaine-apply-current-preset)
+    (add-hook 'enable-theme-functions #'fontaine-apply-current-preset))
 #+end_src
 
 * 窗口设置
@@ -297,6 +306,18 @@
     (doom-modeline-unicode-fallback t)
     (doom-modeline-enable-word-count nil))
 #+end_src
+** hide-mode-line
+#+begin_src emacs-lisp :tangle yes
+  (use-package hide-mode-line
+    :hook (((treemacs-mode
+             eshell-mode
+             term-mode vterm-mode
+             embark-collect-mode
+             pdf-annot-list-mode) . turn-on-hide-mode-line-mode)
+           (dired-mode . (lambda ()
+                           (and (bound-and-true-p hide-mode-line-mode)
+                                (turn-off-hide-mode-line-mode))))))
+#+end_src
 ** minions 插件
 #+begin_src emacs-lisp
   (use-package minions
@@ -350,36 +371,80 @@ keycast 插件可以在 modeline 上展示所有的按键，以及对应的函�
     :hook ((prog-mode yaml-mode conf-mode) . display-line-numbers-mode)
     :init (setq display-line-numbers-width-start t))
 #+end_src
-* shackle 窗口管理
-shackle 插件能够自定义窗口的弹出方式。
+* 窗口管理
 #+begin_src emacs-lisp
-  (use-package shackle
-    :hook (after-init . shackle-mode)
-    :init
-    (setq shackle-lighter "")
-    (setq shackle-select-reused-windows nil)
-    (setq shackle-default-alignment 'below)
-    (setq shackle-default-size 0.4)
-    (setq shackle-rules
-          ;; CONDITION(:regexp)         :select      :inhibit-window-quit    :size+:align|:other     :same|:popup
-          '((compilation-mode           :ignore t)
-            ("\\*Async Shell.*\*" :regexp t :ignore t)
-            ("*eshell*"                 :selected t                          :size 0.4 :align t      :popup t)
-            (helpful-mode               :selected t                          :size 0.6 :align right  :popup t)
-            ("*Messages*"                :selected t                          :size 0.4 :align t      :popup t)
-            ("*Calendar*"               :selected t                                                  :same t)
-            ("*info*"                   :selected t                                                  :same t)
-            (magit-status-mode          :selected t   :inhibit-window-quit t                         :same t)
-            (magit-log-mode             :selected t   :inhibit-window-quit t                         :same t)
-            ))
-    )
+  ;; Directional window-selection routines
+  (use-package windmove
+    :ensure nil
+    :hook (after-init . (lambda ()
+                          (windmove-default-keybindings 'super))))
+
+  ;; Quickly switch windows
+  (use-package ace-window
+    :custom-face
+    (aw-leading-char-face ((t (:inherit font-lock-keyword-face :foreground unspecified :bold t :height 3.0))))
+    (aw-minibuffer-leading-char-face ((t (:inherit font-lock-keyword-face :bold t :height 1.0))))
+    (aw-mode-line-face ((t (:inherit mode-line-emphasis :bold t))))
+    :bind (([remap other-window] . ace-window))
+    :hook (emacs-startup-hook . ace-window-display-mode)
+    :config
+    (defun toggle-window-split ()
+      (interactive)
+      (if (= (count-windows) 2)
+          (let* ((this-win-buffer (window-buffer))
+                 (next-win-bffer (window-buffer (next-window)))
+                 (this-win-edges (window-edges (selected-window)))
+                 (next-win-edges (window-edges (next-window)))
+                 (this-win-2nd (not (and (<= (car this-win-edges)
+                                             (car next-win-edges))
+                                         (<= (cadr this-win-edges)
+                                             (cadr next-win-edges)))))
+                 (splitter
+                  (if (= (car this-win-edges)
+                         (car (window-edges (next-window))))
+                      'split-window-horizontally
+                    'split-window-vertically)))
+            (delete-other-windows)
+            (let ((first-win (selected-window)))
+              (funcall splitter)
+              (if this-win-2nd (other-window 1))
+              (set-window-buffer (selected-window) this-win-buffer)
+              (set-window-buffer (next-window) next-win-bffer)
+              (select-window first-win)
+              (if this-win-2nd (other-window 1))))
+        (user-error "`toggle-window-split' only supports two windows")))
+
+    ;; Select window via `M-1'...`M-9'
+    (defun aw--select-window (number)
+      "Select the specified window."
+      (when (numberp number)
+        (let ((found nil))
+          (dolist (win (aw-window-list))
+            (when (and (window-live-p win)
+                       (eq number
+                           (string-to-number
+                            (window-parameter win 'ace-window-path))))
+              (setq found t)
+              (aw-switch-to-window win)))
+          (unless found
+            (message "No specified window: %d" number)))))
+    (dotimes (n 9)
+      (bind-key (format "M-%d" (1+ n))
+                (lambda ()
+                  (interactive)
+                  (aw--select-window (1+ n))))))
 #+end_src
 * popper 窗口弹出管理
 #+begin_src emacs-lisp
   (use-package popper
-    :bind (("M-`"     . popper-toggle-latest)
-           ("M-<tab>" . popper-cycle)
-           ("M-\\"    . popper-toggle-type))
+    :custom
+    (popper-group-function #'popper-group-by-directory)
+    (popper-echo-dispatch-actions t)
+    :bind (:map popper-mode-map
+                ("C-h z" . popper-toggle)
+                ("C-<tab>" . popper-cycle)
+                ("C-M-<tab>" . popper-toggle-type))
+    :hook (emacs-startup . popper-echo-mode)
     :init
     (setq popper-reference-buffers
           '("\\*Messages\\*"
@@ -393,23 +458,40 @@ shackle 插件能够自定义窗口的弹出方式。
             (compilation-mode . hide)
             ;; derived from `fundamental-mode' and fewer than 10 lines will be considered a popup
             (lambda (buf) (with-current-buffer buf
-                        (and (derived-mode-p 'fundamental-mode)
-                             (< (count-lines (point-min) (point-max))
-                                10))))
-            )
-          )
-    (popper-mode +1)
-    (popper-echo-mode +1)
+                            (and (derived-mode-p 'fundamental-mode)
+                                 (< (count-lines (point-min) (point-max))
+                                    10))))))
+
+    (with-eval-after-load 'doom-modeline
+      (setq popper-mode-line
+            '(:eval (let ((face (if (doom-modeline--active)
+                                    'doom-modeline-emphasis
+                                  'doom-modeline)))
+                      (if (and (bound-and-true-p doom-modeline-icon)
+                               (bound-and-true-p doom-modeline-mode))
+                          (format " %s "
+                                  (nerd-icons-octicon "nf-oct-pin" :face face))
+                        (propertize " POP " 'face face))))))
     :config
-    ;; group by project.el, projectile, directory or perspective
-    (setq popper-group-function nil)
+    (with-no-warnings
+      (defun my-popper-fit-window-height (win)
+        "Determine the height of popup window WIN by fitting it to the buffer's content."
+        (fit-window-to-buffer
+         win
+         (floor (frame-height) 3)
+         (floor (frame-height) 3)))
+      (setq popper-window-height #'my-popper-fit-window-height)
 
-    ;; pop in child frame or not
-    (setq popper-display-function #'display-buffer-in-child-frame)
-
-    ;; use `shackle.el' to control popup
-    (setq popper-display-control nil)
-    )
+      (defun popper-close-window-hack (&rest _)
+        "Close popper window via `C-g'."
+        ;; `C-g' can deactivate region
+        (when (and (called-interactively-p 'interactive)
+                   (not (region-active-p))
+                   popper-open-popup-alist)
+          (let ((window (caar popper-open-popup-alist)))
+            (when (window-live-p window)
+              (delete-window window)))))
+      (advice-add #'keyboard-quit :before #'popper-close-window-hack)))
 #+end_src
 * posframe
 #+begin_src emacs-lisp :tangle yes
@@ -438,6 +520,20 @@ shackle 插件能够自定义窗口的弹出方式。
                 (/ (+ (plist-get info :parent-frame-height)
                       (* 2 (plist-get info :font-height)))
                    2))))))
+#+end_src
+
+* misc
+#+begin_src emacs-lisp :tangle yes
+  (use-package iscroll
+    :diminish
+    :hook (image-mode . iscroll-mode))
+
+  (use-package mixed-pitch
+    :diminish)
+
+  (use-package page-break-lines
+    :diminish
+    :hook (after-init . global-page-break-lines-mode))
 #+end_src
 * init-ui.el 文件尾
 #+begin_src emacs-lisp

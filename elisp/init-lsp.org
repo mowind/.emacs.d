@@ -20,6 +20,7 @@ PROPERTY: header-args:emacs-lisp :tangle init-lsp.el :lexical t
   (setq lsp-bridge-enable-hover-diagnostic t)
   (setq acm-enable-quick-access t)
   (setq acm-backend-yas-match-by-trigger-keyword t)
+  (setq lsp-bridge-disable-electric-indent t)
 
   (global-lsp-bridge-mode)
 
