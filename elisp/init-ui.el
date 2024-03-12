@@ -20,111 +20,53 @@
   ;; Disable all other themes to avoid awkward blending:
   (mapc #'disable-theme custom-enabled-themes)
 
-  ;; Load the theme of choice:
-  ;; The themes we provide are recorded in the `ef-themes-dark-themes',
-  ;; `ef-themes-light-themes'.
-
-  (if (display-graphic-p)
-      (ef-themes-load-random)
-    (ef-themes-load-random 'dark))
-  )
+  (load-theme 'ef-elea-dark))
 
 (use-package doom-themes)
-
 (use-package modus-themes)
 
-(use-package fontaine
-  :when (display-graphic-p)
-  :config
-  (setq fontaine-latest-state-file
-        (locate-user-emacs-file "etc/fontaine-latest-state.eld")
+(defun font-installed-p (font-name)
+  "Check if font with FONT-NAME is available."
+  (find-font (font-spec :name font-name)))
 
-        fontaine-presets
-        '((regular
-           :default-family "Monaspace Neon";;"BlexMono Nerd Font"
-           :fixed-pitch-family "Monaspace Neon" ;;"BlexMono Nerd Font"
-           :variable-pitch-family "Monaspace Neon";; "BlexMono Nerd Font"
-           :italic-family "Monaspace Neon"
-           :default-height 110
-           :default-weight regular
-           :fixed-pitch-height 1.0
-           :variable-pitch-height 1.0
-           )
-          (large
-           :default-height 180
-           :default-weight normal
-           :fixed-pitch-height 1.0
-           :variable-pitch-height 1.05
-           )
-          (t
-           :default-family "Monaspace Neon";;"BlexMono Nerd Font"
-           :fixed-pitch-family "Monaspace Neon" ;;"BlexMono Nerd Font"
-           :variable-pitch-family "Monaspace Neon";; "BlexMono Nerd Font"
-           :italic-family "Monaspace Neon" ;;"BlexMono Nerd Font"
-           :variable-pitch-weight normal
-           :bold-weight normal
-           :italic-slant italic
-           :line-spacing 0.1)
-          ))
-  (fontaine-set-preset 'regular)
+(defun my-setup-fonts ()
+  "Setup fonts."
+  (when (display-graphic-p)
+    ;; Sest default font
+    (cl-loop for font in '("IBM Plex Mono" "Cascadia Code" "Fira Code"
+                           "SF Mono" "Source Code Pro")
+             when (font-installed-p font)
+             return (set-face-attribute 'default nil
+                                        :family font
+                                        :height 110)))
 
-  ;; set emoji font
-  (set-fontset-font
-   t
-   (if (version< emacs-version "28.1")
-       '(#x1f300 . #x1fad0)
-     'emoji)
-   (cond
-    ((member "Noto Emoji" (font-family-list)) "Noto Emoji")
-    ((member "Symbola" (font-family-list)) "Symbola")
-    ((member "Apple Color Emoji" (font-family-list)) "Apple Color Emoji")
-    ((member "Noto Color Emoji" (font-family-list)) "Noto Color Emoji")
-    ((member "Sego UI Emoji" (font-family-list)) "Segoe UI Emoji")
-    ))
+  ;; Specify font for all unicode characters
+  (cl-loop for font in '("Segoe UI Symbol" "Symbola" "Symbol")
+           when (font-installed-p font)
+           return (if (< emacs-major-version 27)
+                      (set-fontset-font "fontset-default" 'unicode font nil 'prepend)
+                    (set-fontset-font t 'symbol (font-spec :fmaily font) nil 'prepend)))
 
-  ;; set Chinese font
-  (dolist (charset '(kana han symbol cjk-misc bopomofo))
-    (set-fontset-font
-     (frame-parameter nil 'font)
-     charset
-     (font-spec :family
-                (cond
-                 ((eq system-type 'darwin)
-                  (cond
-                   ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
-                   ((member "PingFang SC" (font-family-list)) "PingFang SC")
-                   ((member "WenQuanYi Zen Hei" (font-family-list)) "WenQuanYi Zen Hei")
-                   ((member "Microsoft YaHei" (font-family-list)) "Microsof YaHei")
-                   ))
-                 ((eq system-type 'gnu/linux)
-                  (cond
-                   ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
-                   ((member "PingFang SC" (font-family-list)) "PingFang SC")
-                   ((member "WenQuanYi Zen Hei" (font-family-list)) "WenQuanYi Zen Hei")
-                   ((member "Microsoft YaHei" (font-family-list)) "Microsof YaHei")
-                   ))
-                 (t
-                  (cond
-                   ((member "Sarasa Mono SC Nerd" (font-family-list)) "Sarasa Mono SC Nerd")
-                   ((member "Microsofe YaHei" (font-family-list)) "Mircosoft YaHei")
-                   )))
-                )))
+  ;; Emoji
+  (cl-loop for font in '("Noto Color Emoji" "Apple Color Emoji" "Segoe UI Emoji")
+           when (font-installed-p font)
+           return (cond
+                   ((< emacs-major-version 27)
+                    (set-fontset-font "fontset-default" 'uncode font nil 'prepend))
+                   ((< emacs-major-version 28)
+                    (set-fontset-font t 'symbol (font-spec :fmaily font) nil 'prepend))
+                   (t
+                    (set-fontset-font t 'emoji (font-spec :fmaily font) nil 'prepend))))
 
-  ;; set Chinese font scale
-  (setq face-font-rescale-alist '(
-                                  ("Symbola"             . 1.3)
-                                  ("Mircosoft YaHei"     . 1.2)
-                                  ("WenQuanYi Zen Hei"   . 1.2)
-                                  ("Sarasa Mono SC Nerd" . 1.2)
-                                  ("PingFang SC"         . 1.16)
-                                  ("Lantinghei SC"       . 1.16)
-                                  ("Kaiti SC"            . 1.16)
-                                  ("Yuanti SC"           . 1.16)
-                                  ("Apple Color Emoji"   . 0.91)
-                                  ))
+  ;; Specify font for Chinese characters
+  (cl-loop for font in '("LXGW Neo XiHei" "WenQuanYi Micro Hei Mono" "LXGW WenKai Screen")
+           when (font-installed-p font)
+           return (progn
+                    (setq face-font-rescale-alist `((,font . 1.3)))
+                    (set-fontset-font t 'han (font-spec :family font)))))
 
-  (add-hook 'window-setup-hook #'fontaine-apply-current-preset)
-  (add-hook 'enable-theme-functions #'fontaine-apply-current-preset))
+(my-setup-fonts)
+(add-hook 'window-setup-hook #'my-setup-fonts)
 
 ;; 设置窗口大小，仅仅在图形界面需要设置
 (when (display-graphic-p)
@@ -133,7 +75,7 @@
     (set-frame-height frame (/ (display-pixel-height) 2) nil 'pixelwise)
     (set-frame-position frame (/ (display-pixel-width) 4) 0)))
 
-;; 禁用一些GUI特性
+;; 禁用一些 GUI 特性
 (setq use-dialog-box nil)               ; 鼠标操作不使用对话框
 (setq inhibit-default-init nil)         ; 不加载 `default' 库
 (setq inhibit-startup-screen nil)       ; 不加载启动画面
@@ -148,13 +90,13 @@
 (setq bidi-paragraph-direction 'left-to-right)
 ;; 禁止使用双向括号算法
 
-;; 设置自动折行宽带为80字符，默认值为70
+;; 设置自动折行宽带为 80 字符，默认值为 70
 (setq-default fill-column 80)
 
-;; 设置文件阈值为100MB，默认10MB
+;; 设置文件阈值为 100MB，默认 10MB
 (setq large-file-warning-threshold 100000000)
 
-;; 以16进制显示字节数
+;; 以 16 进制显示字节数
 (setq display-raw-bytes-as-hex t)
 ;; 有输入时禁止 `fontification' 相关的函数钩子，能让滚动更顺滑
 (setq redisplay-skip-fontification-on-input t)
@@ -189,11 +131,11 @@
 (setq split-width-threshold (assoc-default 'width default-frame-alist))
 (setq split-height-threshold nil)
 
-;; TAB键设置，在Emacs里不使用TAB键，所有的TAB键默认为4个空格
+;; TAB 键设置，在 Emacs 里不使用 TAB 键，所有的 TAB 键默认为 4 个空格
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 
-;; yes或no提示设置，通过下面这个函数设置当前缓存区名字匹配到预设的字符串时自动回答yes
+;; yes 或 no 提示设置，通过下面这个函数设置当前缓存区名字匹配到预设的字符串时自动回答 yes
 (setq original-y-or-n-p 'y-or-n-p)
 (defalias 'original-y-or-n-p (symbol-function 'y-or-n-p))
 (defun default-yes-sometimes (prompt)
@@ -218,21 +160,21 @@
 (defalias 'yes-or-no-p 'default-yes-sometimes)
 (defalias 'y-or-n-p 'default-yes-sometimes)
 
-;; 设置剪贴板历史长度200，默认为60
+;; 设置剪贴板历史长度 200，默认为 60
 (setq kill-ring-max 200)
 
 ;; 在剪贴板不存储重复内容
 (setq kill-do-not-save-duplicates t)
 
-;; 设置位置记录长度为6，默认为16
+;; 设置位置记录长度为 6，默认为 16
 ;; 可以使用 `counsel-mark-ring' or `consult-mark' (C-x j) 来访问光标位置记录
 ;; 使用 C-x C-SPC 执行 `pop-global-mark' 直接跳到上一个全局位置处
 (setq mark-ring-max 6)
 (setq global-mark-ring-max 6)
 
-;; 设置emacs-lisp的限制
-(setq max-lisp-eval-depth 10000)  ; 默认值为800
-(setq max-specpdl-size 10000)     ; 默认值为1600
+;; 设置 emacs-lisp 的限制
+(setq max-lisp-eval-depth 10000)  ; 默认值为 800
+(setq max-specpdl-size 10000)     ; 默认值为 1600
 
 ;; 启用 `list-timers', `list-threads' 两个命令
 (put 'list-timers 'disabled nil)
@@ -241,13 +183,13 @@
 ;; 在命令行里支持鼠标
 (xterm-mouse-mode 1)
 
-;; 退出Emacs时进行确认
+;; 退出 Emacs 时进行确认
 (setq confirm-kill-emacs 'y-or-n-p)
 
 ;; 在模式栏上显示当前光标的列号
 (column-number-mode t)
 
-;; 配置所有的编码为UTF-8，参考:
+;; 配置所有的编码为 UTF-8，参考:
 ;; https://thraxys.wordpress.com/2016/01/13/utf-8-in-emacs-everywhere-forever/
 (setq locale-coding-system 'utf-8)
 (set-terminal-coding-system 'utf-8)
