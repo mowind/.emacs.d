@@ -11,16 +11,40 @@
 (use-package rect
   :ensure nil
   :bind (:map text-mode-map
-         ("<C-return>" . rect-hydra/body)
-         :map prog-mode-map
-         ("<C-return>" . rect-hydra/body))
+              ("<C-return>" . rect-hydra/body)
+              :map prog-mode-map
+              ("<C-return>" . rect-hydra/body))
   :init
   (with-eval-after-load 'org
     (bind-key "<s-return>" #'rect-hydra/body))
   (with-eval-after-load 'wgrep
     (bind-key "<C-return>" #'rect-hydra/body))
   (with-eval-after-load 'wdired
-    (bind-key "<C-return>" #'rect-hydra/body)))
+    (bind-key "<C-return>" #'rect-hydra/body))
+
+  ;; pretty hydra settings
+  (pretty-hydra-define rect-hydra (:title (pretty-hydra-title "Rectangle" 'mdicon "nf-md-border_all")
+                                          :color amaranth :body-pre (rectangle-mark-mode) :post (deactivate-mark) :quit-key ("q" "C-g"))
+    ("Move"
+     (("h" backward-char "←")
+      ("j" next-line "↓")
+      ("k" previous-line "↑")
+      ("l" forward-char "→"))
+     "Action"
+     (("w" copy-rectangle-as-kill "copy") ;; C-x r M-w
+      ("y" yank-rectangle "yank")         ;; C-x r y
+      ("t" string-rectangle "string")     ;; C-x r t
+      ("d" kill-rectangle "kill")         ;; C-x r d
+      ("c" clear-rectangle "clear")       ;; C-x r c
+      ("o" open-rectangle "open"))        ;; C-x r o
+     "Misc"
+     (("N" rectangle-number-lines "number lines")        ;; C-x r N
+      ("e" rectangle-exchange-point-and-mark "exchange") ;; C-x C-x
+      ("u" undo "undo")
+      ("r" (if (region-active-p)
+               (deactivate-mark)
+             (rectangle-mark-mode 1))
+       "reset")))))
 
 (use-package autorevert
   :ensure nil
@@ -184,11 +208,32 @@
          ("s-<mouse-1>" . mc/add-cursor-on-click)
          ("C-S-<mouse-1>" . mc/add-cursor-on-click)
          :map mc/keymap
-         ("C-|" . mc/vertical-align-with-space)))
+         ("C-|" . mc/vertical-align-with-space))
+  :init
+  (pretty-hydra-define multiple-cursors-hydra
+    (:title (pretty-hydra-title "Multiple Cursors" 'mdicon "nf-md-cursor_move")
+            :color amaranth :quit-key ("q" "C-g"))
+    ("Up"
+     (("p" mc/mark-previous-like-this "prev")
+      ("P" mc/skip-to-previous-like-this "skip")
+      ("M-p" mc/unmark-previous-like-this "unmark")
+      ("|" mc/vertical-align "align with input CHAR"))
+     "Down"
+     (("n" mc/mark-next-like-this "next")
+      ("N" mc/skip-to-next-like-this "skip")
+      ("M-n" mc/unmark-next-like-this "unmark"))
+     "Misc"
+     (("l" mc/edit-lines "edit lines" :exit t)
+      ("a" mc/mark-all-like-this "mark all" :exit t)
+      ("s" mc/mark-all-in-region-regexp "search" :exit t)
+      ("<mouse-1>" mc/add-cursor-on-click "click"))
+     "% 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")"
+     (("0" mc/insert-numbers "insert numbers" :exit t)
+      ("A" mc/insert-letters "insert letters" :exit t)))))
 
 ;; Smartly select region, rectangle, multi cursors
 ;;(use-package smart-region
-  ;;:hook (after-init . smart-region-on))
+;;:hook (after-init . smart-region-on))
 
 ;; On-the-fly spell checker
 (use-package flyspell
