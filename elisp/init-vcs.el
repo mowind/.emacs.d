@@ -46,6 +46,26 @@
                                          (right-fringe . 8)))
     :config
     (with-no-warnings
+      ;; FIXME:https://github.com/yanghaoxie/transient-posframe/issues/5#issuecomment-1974871665
+      (defun my-transient-posframe--show-buffer (buffer _alist)
+        "Show BUFFER in posframe and we do not us _ALIST at this period."
+        (when (posframe-workable-p)
+          (let* ((posframe
+                  (posframe-show buffer
+                                 :height (with-current-buffer buffer (1- (count-screen-lines (point-min) (point-max))))
+                                 :font transient-posframe-font
+                                 :position (point)
+                                 :poshandler transient-posframe-poshandler
+                                 :background-color (face-attribute 'transient-posframe :background nil t)
+                                 :foreground-color (face-attribute 'transient-posframe :foreground nil t)
+                                 :min-width transient-posframe-min-width
+                                 :min-height transient-posframe-min-height
+                                 :internal-border-width transient-posframe-border-width
+                                 :internal-border-color (face-attribute 'transient-posframe-border :background nil t)
+                                 :override-parameters transient-posframe-parameters)))
+            (frame-selected-window posframe))))
+      (advice-add #'transient-posframe--show-buffer :override #'my-transient-posframe--show-buffer)
+
       (defun my-transient-posframe--hide ()
         "Hide transient posframe."
         (posframe-hide transient--buffer-name))
@@ -90,11 +110,11 @@
   (with-no-warnings
     (with-eval-after-load 'hydra
       (defhydra git-messenger-hydra (:color blue)
-                ("s" git-messenger:popup-show "show")
-                ("c" git-messenger:copy-commit-id "copy hash")
-                ("m" git-messenger:copy-message "copy message")
-                ("," (catch 'git-messenger-loop (git-messenger:show-parent)) "go parent")
-                ("q" git-messenger:popup-close "quit")))
+        ("s" git-messenger:popup-show "show")
+        ("c" git-messenger:copy-commit-id "copy hash")
+        ("m" git-messenger:copy-message "copy message")
+        ("," (catch 'git-messenger-loop (git-messenger:show-parent)) "go parent")
+        ("q" git-messenger:popup-close "quit")))
 
     (defun my-git-messenger:format-detail (vcs commit-it author message)
       (if (eq vcs 'git)
@@ -166,58 +186,58 @@
       (advice-add #'git-messenger:popup-close :override #'ignore)
       (advice-add #'git-messenger:popup-message :override #'my-git-messenger:popup-message)))
 
-;; Resolve diff3 conflicts
-(use-package smerge-mode
-  :ensure nil
-  :diminish
-  ;;:pretty-hydra
-  ;;((:title (pretty-hydra-title "Smerge" 'oction "nf-oct-diff")
-  ;;         :color pink :quit-key ("q" "C-g"))
-  ;; ("Move"
-  ;;  (("n" smerge-next "next")
-  ;;   ("p" smerge-prev "previous"))
-  ;;  "Keep"
-  ;;  (("b" smerge-keep-base "base")
-  ;;   ("u" smerge-keep-upper "upper")
-  ;;   ("l" smerge-keep-lower "lower")
-  ;;   ("a" smerge-keep-all "all")
-  ;;   ("RET" smerge-keep-current "current")
-  ;;   ("C-m" smerge-keep-current "current"))
-  ;;  "Diff"
-  ;;  (("<" smerge-diff-base-upper "upper/base")
-  ;;   ("=" smerge-diff-upper-lower "upper/lower")
-  ;;   (">" smerge-diff-base-lower "upper/lower")
-  ;;   ("R" smerge-refine "refine")
-  ;;   ("E" smerge-ediff "ediff"))
-  ;;  "Other"
-  ;;  (("C" smerge-combine-with-next "combine")
-  ;;   ("r" smerge-resolve "resolve")
-  ;;   ("k" smerge-kill-current "kill")
-  ;;   ("ZZ" (lambda ()
-  ;;           (interactive)
-  ;;           (save-buffer)
-  ;;           (bury-buffer))
-  ;;    "Save and bury buffer" :exit t))))
-  :bind (:map smerge-mode-map
-              ("C-c m" . smerge-mode-hydra/body))
-  :hook ((find-file . (lambda ()
-                        (save-excursion
-                          (goto-char (point-min))
-                          (when (re-search-forward "^<<<<<<< " nil t)
-                            (smerge-mode 1)))))
-         (megit-diff-visit-file . (lambda ()
-                                    (when smerge-mode
-                                      (smerge-mode-hydra/body))))))
+  ;; Resolve diff3 conflicts
+  (use-package smerge-mode
+    :ensure nil
+    :diminish
+    :init
+    (pretty-hydra-define smerge-mode-hydra (:title (pretty-hydra-title "Smerge" 'oction "nf-oct-diff")
+                                                   :color pink :quit-key ("q" "C-g"))
+      ("Move"
+       (("n" smerge-next "next")
+        ("p" smerge-prev "previous"))
+       "Keep"
+       (("b" smerge-keep-base "base")
+        ("u" smerge-keep-upper "upper")
+        ("l" smerge-keep-lower "lower")
+        ("a" smerge-keep-all "all")
+        ("RET" smerge-keep-current "current")
+        ("C-m" smerge-keep-current "current"))
+       "Diff"
+       (("<" smerge-diff-base-upper "upper/base")
+        ("=" smerge-diff-upper-lower "upper/lower")
+        (">" smerge-diff-base-lower "upper/lower")
+        ("R" smerge-refine "refine")
+        ("E" smerge-ediff "ediff"))
+       "Other"
+       (("C" smerge-combine-with-next "combine")
+        ("r" smerge-resolve "resolve")
+        ("k" smerge-kill-current "kill")
+        ("ZZ" (lambda ()
+                (interactive)
+                (save-buffer)
+                (bury-buffer))
+         "Save and bury buffer" :exit t))))
+    :bind (:map smerge-mode-map
+                ("C-c m" . smerge-mode-hydra/body))
+    :hook ((find-file . (lambda ()
+                          (save-excursion
+                            (goto-char (point-min))
+                            (when (re-search-forward "^<<<<<<< " nil t)
+                              (smerge-mode 1)))))
+           (megit-diff-visit-file . (lambda ()
+                                      (when smerge-mode
+                                        (smerge-mode-hydra/body))))))
 
-;; Open github/gitlab/bitbucket page
-(use-package browse-at-remote
-  :bind (:map vc-prefix-map
-              ("B" . browse-at-remote)))
+  ;; Open github/gitlab/bitbucket page
+  (use-package browse-at-remote
+    :bind (:map vc-prefix-map
+                ("B" . browse-at-remote)))
 
-;; Git configuration modes
-(use-package git-modes)
+  ;; Git configuration modes
+  (use-package git-modes)
 
-(provide 'init-vcs)
+  (provide 'init-vcs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-vcs.el ends here

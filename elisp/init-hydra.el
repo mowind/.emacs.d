@@ -14,7 +14,7 @@
     (defun hydra-set-posframe-show-params ()
       "Set hydra-posframe style."
       (setq hydra-posframe-show-params
-            '(:left-fringe 8
+            `(:left-fringe 8
                            :right-fringe 8
                            :internal-border-width 2
                            :internal-border-color ,(face-background 'posframe-border nil t)
@@ -38,7 +38,7 @@
   (cl-defun pretty-hydra-title (title &optional icon-type icon-name
                                       &key face height v-adjust)
     "Add an icon in the hydra title."
-    (let ((face (or fac '(:inherit highlight :reverse-video t)))
+    (let ((face (or face '(:inherit highlight :reverse-video t)))
           (height (or height 1.2))
           (v-adjust (or v-adjust 0.0)))
       (concat

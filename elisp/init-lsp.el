@@ -36,23 +36,20 @@
         ([remap xref-find-references] . lsp-bridge-find-references)
         ([remap view-hello-file] . lsp-bridge-popup-documentation))
   :init
-  (with-eval-after-load 'transient
-    (transient-define-prefix lsp-transient ()
-      "LSP Transient"
-
-      [["Action"
-        ("f" "Format" lsp-bridge-code-format)
-        ("r" "Rename" lsp-bridge-rename)
-        ("x" "Action" lsp-bridge-code-action)]
-       ["Code"
-        ("i" "Implementation" lsp-bridge-find-impl)
-        ("D" "Definition" lsp-bridge-find-def)
-        ("R" "Refrences" lsp-bridge-find-references)]
-       ["Debug"
-        ("o" "Documentation" lsp-bridge-popup-documentation)
-        ("d" "Diagnostic" lsp-bridge-diagnostic-list)
-        ("M-r" "Restart" lsp-bridge-restart-process)]])))
-
+  (pretty-hydra-define lsp-bridge-hydra (:title (pretty-hydra-title "LSP Bridge" 'faicon "nf-fa-rocket" :face 'nerd-icons-green)
+                                                :color amaranth :quit-key ("q" "C-g"))
+    ("Action"
+     (("f" lsp-bridge-code-format "Format")
+      ("r" lsp-bridge-rename "Rename")
+      ("x" lsp-bridge-code-action "Code Action"))
+     "Code"
+     (("i" lsp-bridge-find-impl "Implementation")
+      ("D" lsp-bridge-find-def "Definition")
+      ("R" lsp-bridge-find-references "Refrences"))
+     "Debug"
+     (("o" lsp-bridge-popup-documentation "Documentation")
+      ("d" lsp-bridge-diagnostic-list "Diagnostic")
+      ("M-r" lsp-bridge-restart-process "Restart")))))
 
 (add-hook 'go-ts-mode-hook
           (lambda ()
