@@ -20,7 +20,7 @@
   ;; Disable all other themes to avoid awkward blending:
   (mapc #'disable-theme custom-enabled-themes)
 
-  (load-theme 'ef-elea-dark))
+  (load-theme 'ef-elea-dark t))
 
 (use-package doom-themes)
 (use-package modus-themes)
@@ -33,8 +33,8 @@
   "Setup fonts."
   (when (display-graphic-p)
     ;; Sest default font
-    (cl-loop for font in '("IBM Plex Mono" "Cascadia Code" "Fira Code"
-                           "SF Mono" "Source Code Pro")
+    (cl-loop for font in '("Delugia PL Mono" "Cascadia Code" "IBM Plex Mono"  "Fira Code"
+                            "SF Mono" "Source Code Pro")
              when (font-installed-p font)
              return (set-face-attribute 'default nil
                                         :family font
