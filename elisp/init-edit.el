@@ -226,14 +226,14 @@
      (("l" mc/edit-lines "edit lines" :exit t)
       ("a" mc/mark-all-like-this "mark all" :exit t)
       ("s" mc/mark-all-in-region-regexp "search" :exit t)
-      ("<mouse-1>" mc/add-cursor-on-click "click"))
-     "% 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")"
-     (("0" mc/insert-numbers "insert numbers" :exit t)
-      ("A" mc/insert-letters "insert letters" :exit t)))))
+      ("<mouse-1>" mc/add-cursor-on-click "click")))))
+;;"% 2(mc/num-cursors) cursor%s(if (> (mc/num-cursors) 1) \"s\" \"\")"
+;;(("0" mc/insert-numbers "insert numbers" :exit t)
+;;("A" mc/insert-letters "insert letters" :exit t)))))
 
 ;; Smartly select region, rectangle, multi cursors
 ;;(use-package smart-region
-;;:hook (after-init . smart-region-on))
+;;  :hook (after-init . smart-region-on))
 
 ;; On-the-fly spell checker
 (use-package flyspell
@@ -284,6 +284,92 @@
   :diminish
   :hook ((prog-mode . subword-mode)
          (minibuffer-setup . subword-mode)))
+
+;; Flexible text folding
+(use-package hideshow
+  :ensure nil
+  :diminish hs-minor-mode
+  :init
+  (pretty-hydra-define hideshow-hydra (:title (pretty-hydra-title "HideShow" 'octicon "nf-oct-fold")
+                                              :color amaranth :quit-key ("q" "Cg"))
+    ("Fold"
+     (("t" hs-toggle-all "toggle all")
+      ("a" hs-show-all "show all")
+      ("i" hs-hide-all "hide all")
+      ("g" hs-toggle-hiding "toggle hiding")
+      ("c" hs-cycle "cycle block")
+      ("s" hs-show-block "show block")
+      ("h" hs-hide-block "hide block")
+      ("l" hs-hide-level "hide level"))
+     "Move"
+     (("C-a" mwim-beginning-of-code-or-line "⭰")
+      ("C-e" mwim-end-of-code-or-line "⭲")
+      ("C-b" backward-char "←")
+      ("C-n" next-line "↓")
+      ("C-p" previous-line "↑")
+      ("C-f" forward-char "→")
+      ("C-v" pager-page-down "↘")
+      ("M-v" pager-page-up "↖")
+      ("M-<" beginning-of-buffer "⭶")
+      ("M->" end-of-buffer "⭸"))))
+  :bind (:map hs-minor-mode-map
+              ("C-~" . hideshow-hydra/body)
+              ("C-S-<escape>" . hideshow-hydra/body))
+  :hook (prog-mode . hs-minor-mode)
+  :config
+  ;; More functions
+  ;; @see https://karthinks.com/software/simple-folding-with-hideshow/
+  (defun hs-cycle (&optional level)
+    (interactive "p")
+    (let (message-log-max
+          (inhibit-message t))
+      (if (= level 1)
+          (pcase last-command
+            ('hs-cycle
+             (hs-hide-level 1)
+             (setq this-command 'hs-cycle-children))
+            ('hs-cycle-children
+             (save-execursion (hs-show-block))
+             (setq this-command 'hs-cycle-subtree))
+            ('hs-cycle-subtree
+             (hs-hide-block))
+            (_
+             (if (not (hs-already-hidden-p))
+                 (hs-hide-block)
+               (hs-hide-level 1)
+               (setq this-command 'hs-cycle-children))))
+        (hs-hide-level level)
+        (setq this-command 'hs-hide-level))))
+
+  (defun hs-toggle-all ()
+    "Toggle hide/show all."
+    (interactive)
+    (pcase last-command
+      ('hs-toggle-all
+       (save-excursion (hs-show-all))
+       (setq this-command 'hs-global-show))
+      (_ (hs-hide-all))))
+
+  ;; Display line counts
+  (defun hs-display-code-line-counts (ov)
+    "Display line counts when hiding codes."
+    (when (eq 'code (overlay-get ov 'hs))
+      (overlay-put ov 'display
+                   (concat
+                    " "
+                    (propertize
+                     (if (char-displayable-p ?⏷) "⏷" "...")
+                     'face 'shadow)
+                    (propertize
+                     (format " (%d lines)"
+                             (count-lines (overlay-start ov)
+                                          (overlay-end ov)))
+                     'face '(:inherit shadow :height 0.8))
+                    " "))))
+  (setq hs-set-up-overlay #'hs-display-code-line-counts))
+
+;; Open files as another user
+(use-package sudo-edit)
 
 ;; Narrow/Widen
 (use-package fancy-narrow

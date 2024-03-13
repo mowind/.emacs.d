@@ -39,7 +39,7 @@
   (pretty-hydra-define lsp-bridge-hydra (:title (pretty-hydra-title "LSP Bridge" 'faicon "nf-fa-rocket" :face 'nerd-icons-green)
                                                 :color amaranth :quit-key ("q" "C-g"))
     ("Action"
-     (("f" lsp-bridge-code-format "Format")
+     (("f" format-all-buffer "Format")
       ("r" lsp-bridge-rename "Rename")
       ("x" lsp-bridge-code-action "Code Action"))
      "Code"
