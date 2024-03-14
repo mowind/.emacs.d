@@ -19,7 +19,7 @@
   :straight '(lsp-bridge
               :type git
               :host github
-              :repos "mowind/lsp-bridge"
+              :repo "mowind/lsp-bridge"
               :files ("*" (:exclude ".git"))
               :build (:not compile))
   :hook (after-init . global-lsp-bridge-mode)

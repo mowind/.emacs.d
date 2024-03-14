@@ -156,7 +156,12 @@
   (add-hook 'org-mode-hook #'valign-mode)
   (add-hook 'markdown-mode-hook #'valign-mode))
 
-(use-package format-all)
+(use-package format-all
+  :commands format-all-mode
+  :hook (prog-mode . format-all-mode)
+  :config
+  (setq-default format-all-formatters
+                '(("Go" goimports))))
 
 (use-package pangu-spacing
   :init
