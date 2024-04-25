@@ -5,9 +5,12 @@
 
 ;; Rust
 (use-package rustic
-  :custom (rustic-lsp-client centaur-lsp))
+  :custom (rustic-lsp-client nil))
 
 (use-package ron-mode
   :mode ("\\.ron" . ron-mode))
 
 (provide 'init-rust)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; init-rust.el ends here
