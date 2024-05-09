@@ -3,6 +3,15 @@
 
 ;;; Code:
 
+;; Optimization
+(setq idle-update-delay 1.0)
+
+(setq-default cursor-in-non-selected-windows nil)
+(setq highlight-nonselected-windows nil)
+
+(setq fast-but-imprecise-scrolling t)
+(setq redisplay-skip-fontification-on-input t)
+
 (use-package ef-themes
   :bind ("C-c t" . ef-themes-toggle)
   :init
@@ -18,11 +27,41 @@
           (t . (rainbow bold 1))))
   (setq ef-themes-region '(intense no-extend neutral))
   ;; Disable all other themes to avoid awkward blending:
-  (mapc #'disable-theme custom-enabled-themes)
+  (mapc #'disable-theme custom-enabled-themes))
 
-  (load-theme 'ef-elea-dark t))
+;;(load-theme 'ef-elea-dark t))
 
-(use-package doom-themes)
+(use-package solaire-mode
+  :hook (after-init . solaire-global-mode))
+
+(use-package doom-themes
+  :custom
+  (doom-themes-enable-bold t)
+  (doom-themes-enable-italic t)
+  :init (load-theme 'doom-dracula t)
+  :config
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+
+  ;; WORKAROUND: Visual bell on 29+
+  ;; @see https://github.com/doomemacs/themes/issues/733
+  (with-no-warnings
+    (defun my-doom-themes-visual-bell-fn ()
+      "Blink the mode-line red briefly. Set `ring-bell-function' to this to use it."
+      (let ((buf (current-buffer))
+            (cookies (mapcar (lambda (face)
+                               (face-remap-add-relative face 'doom-themes-visual-bell))
+                             (if (facep 'mode-line-active)
+                                 '(mode-line-active solaire-mode-line-active-face)
+                               '(mode-line solaire-mode-line-face)))))
+        (force-mode-line-update)
+        (run-with-timer 0.15 nil
+                        (lambda ()
+                          (with-current-buffer buf
+                            (mapc #'face-remap-remove-relative cookies)
+                            (force-mode-line-update))))))
+    (advice-add #'doom-themes-visual-bell-fn :override #'my-doom-themes-visual-bell-fn)))
+
 (use-package modus-themes)
 
 (defun font-installed-p (font-name)
@@ -68,6 +107,17 @@
 (my-setup-fonts)
 (add-hook 'window-setup-hook #'my-setup-fonts)
 
+;; Easily adjust the font size in all frames
+(use-package default-text-scale
+  :hook (after-init . default-text-scale-mode)
+  :bind (:map default-text-scale-mode-map
+         ("s-="   . default-text-scale-increase)
+         ("s--"   . default-text-scale-decrease)
+         ("s-0"   . default-text-scale-reset)
+         ("C-s-=" . default-text-scale-increase)
+         ("C-s--" . default-text-scale-decrease)
+         ("C-s-0" . default-text-scale-reset)))
+
 ;; 设置窗口大小，仅仅在图形界面需要设置
 (when (display-graphic-p)
   (let ((frame (selected-frame)))
@@ -81,6 +131,9 @@
 (setq inhibit-startup-screen nil)       ; 不加载启动画面
 (setq inhibit-startup-message nil)      ; 不加载启动消息
 (setq inhibit-startup-buffer-menu nil)  ; 不显示缓冲区列表
+
+(unless (daemonp)
+  (advice-add #'display-startup-echo-area-message :override #'ignore))
 
 ;; 草稿缓冲区默认文字设置
 (setq initial-scratch-message (concat ";; Happy hacking, "
@@ -115,14 +168,21 @@
 (setq select-enable-clipboard t)  ; 拷贝时使用剪贴板
 
 ;; 鼠标滚动设置
-(setq scroll-step 2)
-(setq scroll-margin 2)
-(setq hscroll-step 2)
-(setq hscroll-margin 2)
-(setq scroll-conservatively 101)
-(setq scroll-up-aggressively 0.01)
-(setq scroll-down-aggressively 0.01)
-(setq scroll-preserve-screen-position 'always)
+(when (display-graphic-p)
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . hscroll))
+        mouse-wheel-scroll-amount-horizontal 1
+        mouse-wheel-progressive-speed nil))
+(setq scroll-step 1)
+(setq scroll-margin 0)
+(setq scroll-conservatively 1000000)
+;;(setq scroll-up-aggressively 0.01)
+;;(setq scroll-down-aggressively 0.01)
+(setq scroll-preserve-screen-position t)
+
+;; Good pixel line scrolling
+(if (fboundp 'pixel-scroll-precision-mode)
+    (pixel-scroll-precision-mode t))
+
 
 ;; 对于高的行禁止自动垂直滚动
 (setq auto-window-vscroll nil)
@@ -207,19 +267,22 @@
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)
-  :custom
-  (doom-modeline-irc nil)
-  (doom-modeline-mu4e nil)
-  (doom-modeline-gnus nil)
-  (doom-modeline-github nil)
-  (doom-modeline-buffer-file-name-style 'truncate-upto-root)
-  (doom-modeline-persp-name nil)
-  (doom-modeline-unicode-fallback t)
-  (doom-modeline-enable-word-count nil))
+  :init
+  (setq doom-modeline-icon t
+        doom-modeline-minor-modes t))
+;;:custom
+;;(doom-modeline-irc nil)
+;;(doom-modeline-mu4e nil)
+;;(doom-modeline-gnus nil)
+;;(doom-modeline-github nil)
+;;(doom-modeline-buffer-file-name-style 'truncate-upto-root)
+;;(doom-modeline-persp-name nil)
+;;(doom-modeline-unicode-fallback t)
+;;(doom-modeline-enable-word-count nil))
 
 (use-package hide-mode-line
   :hook (((treemacs-mode
-           eshell-mode
+           eshell-mode shell-mode
            term-mode vterm-mode
            embark-collect-mode
            pdf-annot-list-mode) . turn-on-hide-mode-line-mode)
@@ -228,7 +291,7 @@
                               (turn-off-hide-mode-line-mode))))))
 
 (use-package minions
-  :hook (doom-modeling-mode . minions-mode))
+  :hook (doom-modeline-mode . minions-mode))
 
 (use-package nerd-icons
   :config
