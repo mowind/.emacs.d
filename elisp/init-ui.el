@@ -33,8 +33,8 @@
   "Setup fonts."
   (when (display-graphic-p)
     ;; Sest default font
-    (cl-loop for font in '("Delugia PL Mono" "Cascadia Code" "IBM Plex Mono"  "Fira Code"
-                            "SF Mono" "Source Code Pro")
+    (cl-loop for font in '("Monaspace Neon" "Delugia PL Mono" "Cascadia Code" "IBM Plex Mono"
+                           "Fira Code" "SF Mono" "Source Code Pro")
              when (font-installed-p font)
              return (set-face-attribute 'default nil
                                         :family font

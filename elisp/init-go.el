@@ -72,12 +72,12 @@
                 ("C-c t j" . go-test-current-project)
                 ("C-c t b" . go-test-current-benchmark)
                 ("C-c t c" . go-test-current-coverage)
-                ("C-c t x" . go-run)))
+                ("C-c t x" . go-run))))
 
-  (use-package go-ts-mode
-    :hook (go-ts-mode . (lambda ()
-                          (setq go-ts-mode-indent-offset 4)))
-    :init (setq go-ts-mode-indent-offset 4)))
+(use-package go-ts-mode
+  :hook (go-ts-mode . (lambda ()
+                        (setq go-ts-mode-indent-offset 4)))
+  :init (setq go-ts-mode-indent-offset 4))
 
 (provide 'init-go)
 

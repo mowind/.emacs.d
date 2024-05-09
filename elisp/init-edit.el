@@ -87,8 +87,11 @@
   :config
   ;; Disable in some modes
   (dolist (mode '(gitconfig-mode
-                  asm-mode web-mode html-mode css-mode
-                  go-mode scala-mode shell-mode term-mode vterm-mode
+                  asm-mode web-mode html-mode
+                  css-mode css-ts-mode
+                  go-mode go-ts-mode
+                  python-ts-mode yaml-ts-mode
+                  scala-mode shell-mode term-mode vterm-mode
                   prolog-inferior-mode solidity-mode))
     (add-to-list 'aggressive-indent-excluded-modes mode))
 
