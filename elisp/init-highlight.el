@@ -212,8 +212,8 @@
   :custom-face
   (pulse-highlight-start-face ((t (:inherit region :background unspecified))))
   (pulse-highlight-face ((t (:inherit region :background unspecified))))
-  :hook (((dump-jump-after-jump imenu-after-jump) . my-recenter-add-pulse)
-         ((bookmark-after-jump magit-diff-visit-file next-error) . my-recenter-add-pulse))
+  :hook (((dump-jump-after-jump imenu-after-jump) . my-recenter-and-pulse)
+         ((bookmark-after-jump magit-diff-visit-file next-error) . my-recenter-and-pulse-line))
   :init
   (with-no-warnings
     (defun my-pulse-momentary-line (&rest _)
