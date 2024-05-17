@@ -270,15 +270,6 @@
   :init
   (setq doom-modeline-icon t
         doom-modeline-minor-modes t))
-;;:custom
-;;(doom-modeline-irc nil)
-;;(doom-modeline-mu4e nil)
-;;(doom-modeline-gnus nil)
-;;(doom-modeline-github nil)
-;;(doom-modeline-buffer-file-name-style 'truncate-upto-root)
-;;(doom-modeline-persp-name nil)
-;;(doom-modeline-unicode-fallback t)
-;;(doom-modeline-enable-word-count nil))
 
 (use-package hide-mode-line
   :hook (((treemacs-mode
@@ -292,6 +283,21 @@
 
 (use-package minions
   :hook (doom-modeline-mode . minions-mode))
+
+
+  ;; awesome-tray
+  ;;(use-package awesome-tray
+  ;;  :straight '(awesome-tray
+  ;;              :type git
+  ;;              :host github
+  ;;              :repo "manateelazycat/awesome-tray"
+  ;;              :files ("*" (:exclude ".git"))
+  ;;              :build (:not compile))
+  ;;  :init
+  ;;  (awesome-tray-mode 1)
+  ;;  :custom
+  ;;  (awesome-tray-active-modules '("location" "pdf-view-page" "belong" "file-path" "mode-name" "last-command" "battery" "date"))
+  ;;  (awesome-tray-info-padding-right 1))
 
 (use-package nerd-icons
   :config
