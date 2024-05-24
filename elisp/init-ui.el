@@ -72,12 +72,13 @@
   "Setup fonts."
   (when (display-graphic-p)
     ;; Sest default font
-    (cl-loop for font in '("Source Code Pro" "Monaspace Neon" "Delugia PL Mono" "Cascadia Code" "IBM Plex Mono"
-                           "Fira Code" "SF Mono")
+    (cl-loop for font in '("IBM Plex Mono" "Source Code Pro"
+                           "Monaspace Neon" "Delugia PL Mono"
+                           "Cascadia Code" "Fira Code" "SF Mono")
              when (font-installed-p font)
              return (set-face-attribute 'default nil
                                         :family font
-                                        :height 116)))
+                                        :height 120)))
 
   ;; Specify font for all unicode characters
   (cl-loop for font in '("Segoe UI Symbol" "Symbola" "Symbol")
@@ -392,6 +393,7 @@
           "^\\*eshell.*\\*$" eshell-mode
           "^\\*shell.*\\*$" shell-mode
           (compilation-mode . hide)
+          rg-mode fanyi-mode
           ;; derived from `fundamental-mode' and fewer than 10 lines will be considered a popup
           (lambda (buf) (with-current-buffer buf
                           (and (derived-mode-p 'fundamental-mode)
@@ -421,9 +423,9 @@
     (defun popper-close-window-hack (&rest _)
       "Close popper window via `C-g'."
       ;; `C-g' can deactivate region
-      (when (and (called-interactively-p 'interactive)
-                 (not (region-active-p))
-                 popper-open-popup-alist)
+      (when (and ;;(called-interactively-p 'interactive)
+             (not (region-active-p))
+             popper-open-popup-alist)
         (let ((window (caar popper-open-popup-alist)))
           (when (window-live-p window)
             (delete-window window)))))
