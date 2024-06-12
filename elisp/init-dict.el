@@ -49,11 +49,11 @@
   ;; Tweak child frame
   (with-no-warnings
     ;; Translators
-    (setq gt-preset-tranlators
+    (setq gt-preset-translators
           `((default          . ,(gt-translator :taker   (cdar (gt-ensure-plain gt-preset-takers))
                                                 :engines (cdar (gt-ensure-plain gt-preset-engines))
                                                 :render  (cdar (gt-ensure-plain gt-preset-renders))))
-            (youdao-dict      . ,(gt-translator :taker (gt-taker :langs '(en zh) :text 'word :promt t)
+            (youdao-dict      . ,(gt-translator :taker (gt-taker :langs '(en zh) :text 'word :prompt t)
                                                 :engines (gt-youdao-dict-engine)
                                                 :render (gt-buffer-render)))
             (youdao-dict-dwim . ,(gt-translator :taker (gt-taker :langs '(en zh) :text 'word)
@@ -81,7 +81,7 @@
                                                                (gt-google-engine))
                                                 :render (gt-buffer-render)))
             (Text-Utility     . ,(gt-text-utility :taker (gt-taker :pick nil)
-                                                  :engines (gt-buffer-render)))))
+                                                  :render (gt-buffer-render)))))
     (setq gt-default-translator (alist-get 'multi-dict-dwim gt-preset-translators))
 
     (defun gt--do-translate (dict)

@@ -24,11 +24,15 @@
               :build (:not compile))
   :hook (after-init . global-lsp-bridge-mode)
   :custom
-  (lsp-bridge-signature-show-function 'eldoc-message)
+  ;;(lsp-bridge-signature-show-function 'eldoc-message)
+  (lsp-bridge-signature-show-function 'lsp-bridge-signature-show-with-frame)
   (lsp-bridge-enable-org-babel t)
   (lsp-bridge-enable-hover-diagnostic t)
   (acm-markdown-render-font-height 80)
   (acm-backend-lsp-match-mode "fuzzy")
+  (acm-candidate-match-function 'orderless-regexp)
+  (acm-enable-search-sdcv-words t)
+  ;;(acm-backend-search-sdcv-words-dictionary "/home/wangjw/repos/lazycat-emacs/site-lisp/sdcv-dict/stardict-oxford-gb-formated-2.4.2/oxford-gb-formated")
   :bind
   (:map lsp-bridge-mode-map
         ([remap xref-find-definitions] . lsp-bridge-find-def)
