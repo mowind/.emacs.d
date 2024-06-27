@@ -65,6 +65,7 @@
 (require 'init-completion)
 (require 'init-edit)
 (require 'init-dired)
+;;(require 'init-dirvish)
 (require 'init-yasnippet)
 
 (require 'init-highlight)
@@ -80,6 +81,7 @@
 
 (require 'init-check)
 (require 'init-prog)
+(require 'init-elisp)
 (require 'init-go)
 (require 'init-solidity)
 (require 'init-rust)
@@ -94,7 +96,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098"
+   '("36b57dcbe8262c52d3123ed30fa34e5ef6b355881674142162a8ca8e26124da9"
+     "8c7e832be864674c220f9a9361c851917a93f921fedb7717b1b5ece47690c098"
      "7c28419e963b04bf7ad14f3d8f6655c078de75e4944843ef9522dbecfcd8717d"
      "00cec71d41047ebabeb310a325c365d5bc4b7fab0a681a2a108d32fb161b4006"
      "0f76f9e0af168197f4798aba5c5ef18e07c926f4e7676b95f2a13771355ce850" default)))

@@ -38,7 +38,7 @@
   :custom
   (doom-themes-enable-bold t)
   (doom-themes-enable-italic t)
-  :init (load-theme 'doom-dracula t)
+  ;;:init (load-theme 'doom-dracula t)
   :config
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -62,7 +62,8 @@
                             (force-mode-line-update))))))
     (advice-add #'doom-themes-visual-bell-fn :override #'my-doom-themes-visual-bell-fn)))
 
-(use-package modus-themes)
+(use-package modus-themes
+  :init (load-theme 'modus-vivendi t))
 
 (defun font-installed-p (font-name)
   "Check if font with FONT-NAME is available."
@@ -265,6 +266,9 @@
 (modify-coding-system-alist 'process "*" 'utf-8)
 (when (display-graphic-p)
   (setq x-select-request-type '(UTF8_STRING COMPOUND_TEXT TEXT STRING)))
+
+;; disable warning
+(setq byte-compile-warnings nil)
 
 (use-package doom-modeline
   :hook (after-init . doom-modeline-mode)

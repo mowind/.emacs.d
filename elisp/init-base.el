@@ -125,7 +125,8 @@
            ("C-M-8" . transwin-dec)
            ("C-M-7" . transwin-toggle))
     :init
-    (setq transwin-parameter-alpha 'alpha-background)))
+    (setq transwin-parameter-alpha 'alpha-background)
+    (transwin-toggle)))
 
 ;; Display available keybindings in popup
 (use-package which-key

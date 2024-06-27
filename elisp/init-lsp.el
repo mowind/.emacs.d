@@ -24,10 +24,11 @@
               :build (:not compile))
   :hook (after-init . global-lsp-bridge-mode)
   :custom
-  ;;(lsp-bridge-signature-show-function 'eldoc-message)
-  (lsp-bridge-signature-show-function 'lsp-bridge-signature-show-with-frame)
+  (lsp-bridge-signature-show-function 'eldoc-message)
   (lsp-bridge-enable-org-babel t)
   (lsp-bridge-enable-hover-diagnostic t)
+  (lsp-bridge-symbols-enable-which-func t)
+  ;;(lsp-bridge-enable-inlay-hint t)
   (acm-markdown-render-font-height 80)
   (acm-backend-lsp-match-mode "fuzzy")
   (acm-candidate-match-function 'orderless-regexp)
