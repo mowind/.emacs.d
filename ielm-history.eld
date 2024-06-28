@@ -1,0 +1,23 @@
+(message "hello world")
+(defconst zsh-shell "/usr/bin/zsh")
+zsh-shell
+(defun afunction (a b c) (+ a b c))
+(afunction 1 2 3)
+(defun myfun() (message "Hello Emacs"))
+(myfun)
+(defun signum (n))
+(defun signum (n) )
+(defun signum (n)
+         (cond ((> n 0) 1)
+               ((< n 0) 0)
+               (0)))
+
+(signum 1)
+(defun factorial (n)
+         (if (eq n 0)
+             1
+           (* n (factorial (- n 1)))))
+(factorial 10)
+(lambda (x) (+ x 3))
+((lambda (x) (+ x 3)) 4)
+(funcall (lambda (x) (+ x 3)) 4)

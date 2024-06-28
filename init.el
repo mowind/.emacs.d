@@ -81,6 +81,7 @@
 
 (require 'init-check)
 (require 'init-prog)
+(require 'init-ielm)
 (require 'init-elisp)
 (require 'init-go)
 (require 'init-solidity)

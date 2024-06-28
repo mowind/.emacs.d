@@ -141,6 +141,7 @@
   (which-key-add-key-based-replacements "C-c &" "yasnippet")
   (which-key-add-key-based-replacements "C-c @" "hideshow")
   (which-key-add-key-based-replacements "C-c t" "hl-todo")
+  (which-key-add-key-based-replacements "C-c c" "consult")
 
   (which-key-add-key-based-replacements "C-x 8" "unicode")
   (which-key-add-key-based-replacements "C-x 8 e" "emoji")
@@ -150,6 +151,8 @@
   (which-key-add-key-based-replacements "C-x t" "tab & treemacs")
   (which-key-add-key-based-replacements "C-x x" "buffer")
   (which-key-add-key-based-replacements "C-x RET" "coding-system")
+  (which-key-add-key-based-replacements "C-x c" "colorful")
+  (which-key-add-key-based-replacements "C-x p" "project")
 
   (which-key-add-major-mode-key-based-replacements 'org-mode "C-c \"" "org-plot")
   (which-key-add-major-mode-key-based-replacements 'org-mode "C-c C-v" "org-babel")

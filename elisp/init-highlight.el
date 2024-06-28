@@ -91,12 +91,9 @@
                              (highlight-indent-guides-mode 1)))))))
 
 ;; Colorize color name in buffers
-(use-package rainbow-mode
+(use-package colorful-mode
   :diminish
-  :defines helpful-mode-map
-  :bind (:map help-mode-map
-              ("w" . rainbow-mode))
-  :hook ((html-mode php-mode helpful-mode) . rainbow-mode)
+  :hook ((mhtml-mode html-mode html-ts-mode php-mode latex-mode help-mode helpful-mode prog-mode) . rainbow-mode)
   :init (with-eval-after-load 'helpful
           (bind-key "w" #'rainbow-mode helpful-mode-map))
   :config
@@ -107,7 +104,7 @@
       (let* ((match (or match 0))
              (ov (make-overlay (match-beginning match) (match-end match))))
         (overlay-put ov 'ovrainbow t)
-        (overlay-put ov 'face '((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
+        (overlay-put ov 'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
                                                   "white" "black"))
                                 (:background ,color)))))
     (advice-add #'rainbow-colorize-match :override #'my-rainbow-colorize-match)

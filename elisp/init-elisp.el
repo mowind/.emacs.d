@@ -20,7 +20,7 @@
   (with-no-warnings
     ;; Align indent keywords
     ;; @see https://emacs.stackexchange.com/questions/10230/how-to-indent-keywords-aligned
-    (defun my-list-indent-function (indent-point state)
+    (defun my-lisp-indent-function (indent-point state)
       "This function is the normal value of the variable `lisp-indent-function'.
 The function `calculate-lisp-indent' calls this to determine
 if the arguments of a Lisp function call should be indented specially.

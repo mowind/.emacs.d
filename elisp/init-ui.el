@@ -73,9 +73,9 @@
   "Setup fonts."
   (when (display-graphic-p)
     ;; Sest default font
-    (cl-loop for font in '("Liga Comic Mono" "MonoLisa Nasy" "IBM Plex Mono" "Source Code Pro"
-                            "Monaspace Neon" "Delugia PL Mono"
-                            "Cascadia Code" "Fira Code" "SF Mono")
+    (cl-loop for font in '("Source Code Pro" "Liga Comic Mono" "MonoLisa Nasy" "IBM Plex Mono"
+                           "Monaspace Neon" "Delugia PL Mono"
+                           "Cascadia Code" "Fira Code" "SF Mono")
              when (font-installed-p font)
              return (set-face-attribute 'default nil
                                         :family font

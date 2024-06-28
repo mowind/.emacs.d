@@ -19,7 +19,7 @@
   :straight '(lsp-bridge
               :type git
               :host github
-              :repo "mowind/lsp-bridge"
+              :repo "manateelazycat/lsp-bridge"
               :files ("*" (:exclude ".git"))
               :build (:not compile))
   :hook (after-init . global-lsp-bridge-mode)
@@ -36,13 +36,13 @@
   ;;(acm-backend-search-sdcv-words-dictionary "/home/wangjw/repos/lazycat-emacs/site-lisp/sdcv-dict/stardict-oxford-gb-formated-2.4.2/oxford-gb-formated")
   :bind
   (:map lsp-bridge-mode-map
-        ([remap xref-find-definitions] . lsp-bridge-find-def)
-        ([remap xref-go-back] . lsp-bridge-find-def-return)
-        ([remap xref-find-references] . lsp-bridge-find-references)
-        ([remap view-hello-file] . lsp-bridge-popup-documentation))
+   ([remap xref-find-definitions] . lsp-bridge-find-def)
+   ([remap xref-go-back] . lsp-bridge-find-def-return)
+   ([remap xref-find-references] . lsp-bridge-find-references)
+   ([remap view-hello-file] . lsp-bridge-popup-documentation))
   :init
   (pretty-hydra-define lsp-bridge-hydra (:title (pretty-hydra-title "LSP Bridge" 'faicon "nf-fa-rocket" :face 'nerd-icons-green)
-                                                :color amaranth :quit-key ("q" "C-g"))
+                                         :color amaranth :quit-key ("q" "C-g"))
     ("Action"
      (("f" format-all-buffer "Format")
       ("r" lsp-bridge-rename "Rename")
