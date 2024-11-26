@@ -155,6 +155,7 @@ Otherwise the startup will be very slow."
 (require 'init-ruby)
 (require 'init-elixir)
 (require 'init-web)
+(require 'init-haskell)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init.el ends here
