@@ -170,6 +170,7 @@
           "\\*Fd\\*$" "\\*Find\\*$" "\\*Finder\\*$"
           "\\*Kill Ring\\*$"
           "\\*Embark \\(Collect\\|Live\\):.*\\*$"
+          "\\*lsp-bridge\\*$"
 
           bookmark-bmenu-mode
           comint-mode

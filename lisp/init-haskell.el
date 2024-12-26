@@ -36,7 +36,7 @@
 
   (add-to-list 'align-rules-list
                '(haskell-types
-                 (regexp . "\\(\\s-+\\)\\(::\\|鈭穃\)\\s-+")
+                 (regexp . "\\(\\s-+\\)\\(::\\|::\\)\\s-+")
                  (modes quote (haskell-mode literate-haskell-mode))))
   (add-to-list 'align-rules-list
                '(haskell-assignment
@@ -44,11 +44,11 @@
                  (modes quote (haskell-mode literate-haskell-mode))))
   (add-to-list 'align-rules-list
                '(haskell-arrows
-                 (regexp . "\\(\\s-+\\)\\(->\\|鈫抃\)\\s-+")
+                 (regexp . "\\(\\s-+\\)\\(->\\|::\\)\\s-+")
                  (modes quote (haskell-mode literate-haskell-mode))))
   (add-to-list 'align-rules-list
                '(haskell-left-arrows
-                 (regexp . "\\(\\s-+\\)\\(<-\\|鈫怽\)\\s-+")
+                 (regexp . "\\(\\s-+\\)\\(<-\\|::\\)\\s-+")
                  (modes quote (haskell-mode literate-haskell-mode)))))
 
 (use-package haskell-snippets)
