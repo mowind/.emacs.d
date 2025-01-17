@@ -7,6 +7,10 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'init-const)
+  (require 'init-custom))
+
 ;; Haskell
 (use-package haskell-mode
   :mode "\\.hs\\'"
@@ -26,8 +30,7 @@
         haskell-process-suggest-haskell-docs-imports t
         haskell-process-suggest-remove-import-lines  t
         haskell-process-auto-import-loaded-modules   t
-        haskell-process-log                          t
-        haskell-process-suggest-hayoo-imports        t
+        haskell-process-log                          nil
         haskell-process-suggest-hoogle-imports       t
         haskell-process-type 'ghci)
 
@@ -52,6 +55,9 @@
                  (modes quote (haskell-mode literate-haskell-mode)))))
 
 (use-package haskell-snippets)
+
+(when (eq centaur-lsp 'lsp-mode)
+  (use-package lsp-haskell))
 
 (provide 'init-haskell)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
