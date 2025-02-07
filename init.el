@@ -146,6 +146,7 @@ Otherwise the startup will be very slow."
 (require 'init-lsp)
 (require 'init-dap)
 (require 'init-aider)
+(require 'init-gptel)
 
 (require 'init-prog)
 (require 'init-elisp)
