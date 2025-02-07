@@ -10,6 +10,7 @@
               :host github
               :repo "karthink/gptel")
   :config
+  (setq gptel-default-mode 'org-mode)
   (setq gptel-model   'deepseek-chat
         gptel-backend
         (gptel-make-openai "DeepSeek"     ;Any name you want
@@ -17,7 +18,7 @@
           :endpoint "/chat/completions"
           :stream t
           :key 'gptel-api-key             ;can be a function that returns the key
-          :models '(deepseek-chat deepseek-coder))))
+          :models '(deepseek-chat))))
 
 (defun gptel+ ()
   (interactive)
