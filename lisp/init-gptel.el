@@ -28,6 +28,7 @@
               deepseek/deepseek-r1
               deepseek/deepseek-chat:free
               deepseek/deepseek-r1:free
+              deepseek/deepseek-chat-v3-0324
               qwen/qwen-turbo
               qwen/qwen-plus
               qwen/qwen-max
@@ -39,6 +40,7 @@
               anthropic/claude-3-opus
               google/gemini-2.0-pro-exp-02-05:free
               google/gemini-2.0-flash-thinking-exp:free
+              google/gemini-2.5-pro-exp-03-25:free
               google/gemini-2.0-flash-001)
     :stream t))
 
