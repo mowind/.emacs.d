@@ -13,7 +13,9 @@
   ;;(setq gptel-default-mode 'org-mode)
   (gptel-make-deepseek "DeepSeek"
     :stream t
-    :key #'gptel-api-key)
+    :key #'gptel-api-key
+    :models '(deepseek-chat
+              deepseek-r1))
   (gptel-make-openai "Volces-DeepSeek"
     :host "ark.cn-beijing.volces.com/api/v3"
     :endpoint "/chat/completions"
