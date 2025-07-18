@@ -83,23 +83,9 @@
       (setf (alist-get 'left-fringe eldoc-box-frame-parameters) 8
             (alist-get 'right-fringe eldoc-box-frame-parameters) 8))))
 
-;; Search tool
-(use-package grep
-  :ensure nil
-  :autoload grep-apply-setting
-  :init
-  (when (executable-find "rg")
-    (grep-apply-setting
-     'grep-command "rg --color=auto --null -nH --no-heading -e ")
-    (grep-apply-setting
-     'grep-template "rg --color=auto --null --no-heading -g '!*/' -e <R> <D>")
-    (grep-apply-setting
-     'grep-find-command '("rg --color=auto --null -nH --no-heading -e ''" . 38))
-    (grep-apply-setting
-     'grep-find-template "rg --color=auto --null -nH --no-heading -e <R> <D>")))
-
 ;; Cross-referencing commands
 (use-package xref
+  :autoload xref-show-definitions-completing-read
   :bind (("M-g ." . xref-find-definitions)
          ("M-g ," . xref-go-back))
   :init
@@ -124,6 +110,7 @@
 ;; Browse devdocs.io documents using EWW
 (use-package devdocs
   :autoload (devdocs--installed-docs devdocs--available-docs)
+  :commands (devdocs-install devdocs-lookup)
   :bind (:map prog-mode-map
          ("M-<f1>" . devdocs-dwim)
          ("C-h D"  . devdocs-dwim))
