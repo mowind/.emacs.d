@@ -40,7 +40,7 @@
 (use-package winner
   :ensure nil
   :commands (winner-undo winner-redo)
-  :hook (after-init . winner-mode)
+  :hook after-init
   :init (setq winner-boring-buffers '("*Completions*"
                                       "*Compile-Log*"
                                       "*inferior-lisp*"
@@ -183,11 +183,10 @@
           Buffer-menu-mode
 
           flymake-diagnostics-buffer-mode
-          flycheck-error-list-mode flycheck-verify-mode
 
           gnus-article-mode devdocs-mode
-          grep-mode occur-mode rg-mode deadgrep-mode ag-mode pt-mode
-          youdao-dictionary-mode osx-dictionary-mode fanyi-mode
+          grep-mode occur-mode rg-mode
+          osx-dictionary-mode fanyi-mode
           "^\\*gt-result\\*$" "^\\*gt-log\\*$"
 
           "^\\*Process List\\*$" process-menu-mode

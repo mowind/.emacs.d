@@ -109,8 +109,7 @@
   (set-selection-coding-system 'utf-8))
 
 ;; Environment
-(when (and centaur-use-exec-path-from-shell
-           (or (memq window-system '(mac ns x)) (daemonp)))
+(when centaur-use-exec-path-from-shell
   (use-package exec-path-from-shell
     :commands exec-path-from-shell-initialize
     :custom (exec-path-from-shell-arguments '("-l"))
@@ -153,6 +152,7 @@
 
 ;; Misc.
 (use-package simple
+  :diminish visual-line-mode
   :ensure nil
   :hook ((after-init . size-indication-mode)
          (text-mode . visual-line-mode)
@@ -218,11 +218,13 @@
       sentence-end-double-space nil
       word-wrap-by-category t)
 
-;; Async
+;; Asynchronous processing
 (use-package async
+  :diminish (async-bytecomp-package-mode dired-async-mode)
   :functions (async-bytecomp-package-mode dired-async-mode)
   :init
-  (async-bytecomp-package-mode 1)
+  (unless sys/win32p
+    (async-bytecomp-package-mode 1))
   (dired-async-mode 1))
 
 ;; Frame

@@ -34,10 +34,6 @@
   (require 'init-const)
   (require 'init-custom))
 
-(declare-function childframe-completion-workable-p "init-funcs")
-(declare-function centaur-compatible-theme-p "init-funcs")
-(declare-function refresh-ns-appearance "init-ui")
-
 ;; Optimization
 (setq idle-update-delay 1.0)
 
@@ -91,25 +87,21 @@
     (progn
       ;; Make certain buffers grossly incandescent
       (use-package solaire-mode
+        :functions (centaur-compatible-theme-p refresh-ns-appearance)
         :hook (after-init . solaire-global-mode))
 
       ;; Excellent themes
       (use-package doom-themes
         :functions centaur-load-theme doom-themes-visual-bell-config
-        :custom
-        (doom-themes-enable-bold t)
-        (doom-themes-enable-italic t)
         :init (centaur-load-theme centaur-theme t)
-        :config
-        ;; Enable flashing mode-line on errors
-        (doom-themes-visual-bell-config)))
+        :config (doom-themes-visual-bell-config)))
   (progn
     (warn "The current theme may be incompatible!")
     (centaur-load-theme centaur-theme t)))
 
 ;; Mode-line
 (use-package doom-modeline
-  :hook (after-init . doom-modeline-mode)
+  :hook after-init
   :init
   (setq doom-modeline-icon centaur-icon
         doom-modeline-minor-modes t)
@@ -162,9 +154,7 @@
       "irc" :toggle doom-modeline-irc)
      ("g f" (setq doom-modeline-irc-buffers (not doom-modeline-irc-buffers))
       "irc buffers" :toggle doom-modeline-irc-buffers)
-     ("g s" (progn
-              (setq doom-modeline-check-simple-format (not doom-modeline-check-simple-format))
-              (and (bound-and-true-p flycheck-mode) (flycheck-buffer)))
+     ("g s" (setq doom-modeline-check-simple-format (not doom-modeline-check-simple-format))
       "simple check format" :toggle doom-modeline-check-simple-format)
      ("g t" (setq doom-modeline-time (not doom-modeline-time))
       "time" :toggle doom-modeline-time)
@@ -232,10 +222,8 @@
             (run-with-timer 300 nil #'doom-modeline--github-fetch-notifications)
             (browse-url "https://github.com/notifications"))
       "github notifications" :exit t)
-     ("e" (cond ((bound-and-true-p flycheck-mode)
-                 (flycheck-list-errors))
-                ((bound-and-true-p flymake-mode)
-                 (flymake-show-diagnostics-buffer)))
+     ("e" (and (bound-and-true-p flymake-mode)
+               (flymake-show-diagnostics-buffer))
       "list errors" :exit t)
      ("w" (if (bound-and-true-p grip-mode)
               (grip-browse-preview)
@@ -260,7 +248,7 @@
 
 ;; A minor-mode menu for mode-line
 (use-package minions
-  :hook (after-init . minions-mode))
+  :hook after-init)
 
 ;; Icons
 (use-package nerd-icons
@@ -327,16 +315,6 @@
       mouse-wheel-scroll-amount-horizontal 1
       mouse-wheel-progressive-speed nil)
 
-;; Smooth scrolling
-(when (fboundp 'pixel-scroll-precision-mode) ;; 29+
-  (use-package ultra-scroll
-    :functions (hl-todo-mode diff-hl-flydiff-mode)
-    :hook (after-init . ultra-scroll-mode)
-    :config
-    (add-hook 'ultra-scroll-hide-functions #'diff-hl-flydiff-mode)
-    (add-hook 'ultra-scroll-hide-functions #'hl-todo-mode)
-    (add-hook 'ultra-scroll-hide-functions #'jit-lock-mode)))
-
 ;; Use fixed pitch where it's sensible
 (use-package mixed-pitch :diminish)
 
@@ -353,13 +331,12 @@
   (use-package transient-posframe
     :diminish
     :defines posframe-border-width
+    :functions childframe-completion-workable-p
     :custom-face
-    (transient-posframe ((t (:inherit tooltip))))
     (transient-posframe-border ((t (:inherit posframe-border :background unspecified))))
-    :hook (after-init . transient-posframe-mode)
+    :hook after-init
     :init (setq transient-mode-line-format nil
                 transient-posframe-border-width posframe-border-width
-                transient-posframe-poshandler 'posframe-poshandler-frame-center
                 transient-posframe-parameters '((left-fringe . 8)
                                                 (right-fringe . 8)))))
 

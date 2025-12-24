@@ -40,6 +40,11 @@
 (setq native-comp-deferred-compilation nil ;; obsolete since 29.1
       native-comp-jit-compilation nil)
 
+;; To speedup the Emacs windows, reducing the count on searching `load-path'
+(when (eq system-type 'windows-nt)
+  (setq load-suffixes '(".elc" ".el")) ;; to avoid searching .so/.dll
+  (setq load-file-rep-suffixes '(""))) ;; to avoid searching *.gz
+
 ;; Package initialize occurs automatically, before `user-init-file' is
 ;; loaded, but after `early-init-file'. We handle package
 ;; initialization, so we must prevent Emacs from doing it early!
@@ -54,7 +59,7 @@
 ;; to skip the mtime checks on every *.elc file.
 (setq load-prefer-newer noninteractive)
 
-;; Explicitly set the prefered coding systems to avoid annoying prompt
+;; Explicitly set the preferred coding systems to avoid annoying prompt
 ;; from emacs (especially on Microsoft Windows)
 (prefer-coding-system 'utf-8)
 

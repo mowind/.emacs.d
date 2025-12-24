@@ -33,11 +33,8 @@
 (eval-when-compile
   (require 'init-custom))
 
-(declare-function centaur-treesit-available-p "init-funcs")
-
 ;; eww
 (use-package eww
-  :ensure nil
   :init
   ;; Install: npm install -g readability-cli
   (when (executable-find "readable")
@@ -92,19 +89,11 @@
 (unless (fboundp 'js-json-mode)
   (use-package json-mode))
 
-;; Format HTML, CSS and JavaScript/JSON
-;; Install: npm -g install prettier
-(when (executable-find "prettier")
-  (use-package prettier
-    :diminish
-    :defines prettier-pre-warm
-    :hook ((js-base-mode css-mode sgml-mode web-mode) . prettier-mode)
-    :init (setq prettier-pre-warm 'none)))
-
 ;; Typescript
 (unless (and (centaur-treesit-available-p)
              (fboundp 'typescript-ts-mode))
-  (use-package typescript-mode))
+  (use-package typescript-mode
+    :functions centaur-treesit-available-p))
 
 ;; Major mode for CoffeeScript code
 (use-package coffee-mode
@@ -131,7 +120,7 @@
   :config
   (use-package restclient-test
     :diminish
-    :hook (restclient-mode . restclient-test-mode)))
+    :hook restclient-mode))
 
 (provide 'init-web)
 

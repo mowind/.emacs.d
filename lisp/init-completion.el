@@ -122,7 +122,7 @@
          ("M-y"     . consult-yank-pop)            ;; orig. yank-pop
          ;; M-g bindings in `goto-map'
          ("M-g e"   . consult-compile-error)
-         ("M-g f"   . consult-flymake)             ;; Alternative: consult-flycheck
+         ("M-g f"   . consult-flymake)
          ("M-g g"   . consult-goto-line)           ;; orig. goto-line
          ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
          ("M-g o"   . consult-outline)             ;; Alternative: consult-org-heading
@@ -237,6 +237,13 @@ value of the selected COLOR."
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
   (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help))
+
+(use-package consult-dir
+  :ensure t
+  :bind (("C-x C-d" . consult-dir)
+         :map minibuffer-local-completion-map
+         ("C-x C-d" . consult-dir)
+         ("C-x C-j" . consult-dir-jump-file)))
 
 (use-package consult-flyspell
   :bind ("M-g s" . consult-flyspell))
@@ -356,7 +363,7 @@ targets."
   (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
   (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer))
 
-(unless (display-graphic-p)
+(unless (or (display-graphic-p) (featurep 'tty-child-frames))
   (use-package corfu-terminal
     :hook (global-corfu-mode . corfu-terminal-mode)))
 
@@ -388,7 +395,7 @@ targets."
 (use-package cape
   :commands (cape-file cape-elisp-block cape-keyword)
   :autoload (cape-wrap-noninterruptible cape-wrap-nonexclusive cape-wrap-buster)
-  :autoload (cape-wrap-silent cape-wrap-purify)
+  :autoload (cape-wrap-silent)
   :init
   ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file)
@@ -404,11 +411,10 @@ targets."
   (advice-add 'eglot-completion-at-point :around #'cape-wrap-nonexclusive)
   (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive)
 
-  ;; Sanitize the `pcomplete-completions-at-point' Capf.  The Capf has undesired
-  ;; side effects on Emacs 28.  These advices are not needed on Emacs 29 and newer.
+  ;; Sanitize the `pcomplete-completions-at-point' Capf.
+  ;; The Capf has undesired side effects on Emacs 28.
   (unless emacs/>=29p
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)))
+    (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)))
 
 (provide 'init-completion)
 
