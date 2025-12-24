@@ -105,7 +105,7 @@
               :host github
               :repo "LuciusChen/rose-pine"))
 
-(disable-theme 'doom-one :no-confirm)
+(disable-theme 'doom-one)
 (load-theme 'rose-pine-night :no-confirm)
 
 ;; telega
@@ -113,6 +113,7 @@
   :straight '(telega
               :type git
               :host github
+              ;;:repo "zevlg/telega.el")
               :repo "LuciusChen/telega.el")
   :commands (telega)
   :config
