@@ -1,6 +1,6 @@
 ;;; init.el --- A Fancy and Fast Emacs Configuration.	-*- lexical-binding: t no-byte-compile: t -*-
 
-;; Copyright (C) 2006-2025 Vincent Zhang
+;; Copyright (C) 2006-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -84,6 +84,9 @@
   (dolist (dir '("site-lisp" "lisp"))
     (push (expand-file-name dir user-emacs-directory) load-path)))
 
+;; Initialize load paths explicitly
+(update-load-path)
+
 ;; Add subdirectories inside "site-lisp" to `load-path`
 (defun add-subdirs-to-load-path (&rest _)
   "Recursively add subdirectories in `site-lisp` to `load-path`.
@@ -93,11 +96,7 @@ Avoid placing large files like EAF in `site-lisp` to prevent slow startup."
     (normal-top-level-add-subdirs-to-load-path)))
 
 ;; Ensure these functions are called after `package-initialize`
-(advice-add #'package-initialize :after #'update-load-path)
 (advice-add #'package-initialize :after #'add-subdirs-to-load-path)
-
-;; Initialize load paths explicitly
-(update-load-path)
 
 ;; Requisites
 (require 'init-const)

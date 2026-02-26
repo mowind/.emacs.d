@@ -1,6 +1,6 @@
 ;;; early-init.el --- Early initialization. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2019-2025 Vincent Zhang
+;; Copyright (C) 2019-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -32,7 +32,11 @@
 ;;; Code:
 
 ;; Defer garbage collection further back in the startup process
-(setq gc-cons-threshold most-positive-fixnum)
+(if noninteractive  ; in CLI sessions
+    (setq gc-cons-threshold #x8000000   ; 128MB
+          ;; Backport from 29 (see emacs-mirror/emacs@73a384a98698)
+          gc-cons-percentage 1.0)
+  (setq gc-cons-threshold most-positive-fixnum))
 
 ;; Prevent unwanted runtime compilation for gccemacs (native-comp) users;
 ;; packages are compiled ahead-of-time when they are installed and site files
@@ -75,11 +79,16 @@
   (push '(ns-appearance . dark) default-frame-alist))
 
 ;; Prevent flash of unstyled mode line
-(setq mode-line-format nil)
+(setq-default mode-line-format nil)
 
-;; For LSP performance
-;; @see https://emacs-lsp.github.io/lsp-mode/page/performance/
-(setenv "LSP_USE_PLISTS" "true")
+;; PATH and other environment variables injection
+;; To avoid loading `exec-path-from-shell' for better performance
+(when-let ((env-file (expand-file-name "env.el" user-emacs-directory))
+           (env-example-file (expand-file-name "env-example.el" user-emacs-directory)))
+  (when (and (not (file-exists-p env-file))
+             (file-exists-p env-example-file))
+    (copy-file env-example-file env-file))
+  (load env-file 'noerror))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; early-init.el ends here

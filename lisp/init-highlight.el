@@ -1,6 +1,6 @@
 ;; init-highlight.el --- Initialize highlighting configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2006-2025 Vincent Zhang
+;; Copyright (C) 2006-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -54,7 +54,7 @@
   (show-paren-when-point-inside-paren t)
   (show-paren-when-point-in-periphery t)
   :config
-  (if (fboundp 'show-paren-context-when-offscreen)
+  (if (boundp 'show-paren-context-when-offscreen)
       (setq blink-matching-paren-highlight-offscreen t
             show-paren-context-when-offscreen
             (if (childframe-workable-p) 'child-frame 'overlay))
@@ -160,23 +160,22 @@ FACE defaults to inheriting from default and highlight."
 ;; Highlight indentions
 (use-package indent-bars
   :custom
-  (indent-bars-color '(highlight :face-bg t :blend 0.225))
-  (indent-bars-treesit-support centaur-tree-sitter)
+  (indent-bars-color '(font-lock-comment-face :face-bg nil :blend 0.4))
+  (indent-bars-highlight-current-depth '(:face default :blend 0.4))
+  (indent-bars-pattern ".")
+  (indent-bars-width-frac 0.1)
+  (indent-bars-pad-frac 0.1)
+  (indent-bars-color-by-depth nil)
+  (indent-bars-treesit-support (centaur-treesit-available-p))
   (indent-bars-no-descend-string t)
-  (indent-bars-treesit-ignore-blank-lines-types '("module"))
   (indent-bars-prefer-character t)
-  (indent-bars-treesit-scope '((python function_definition class_definition for_statement
-				                       if_statement with_statement while_statement)))
-  :hook (prog-mode yaml-mode)
-  :config (require 'indent-bars-ts))
+  :hook (prog-mode yaml-mode yaml-ts-mode))
 
 ;; Colorize color names in buffers
 (use-package colorful-mode
   :diminish
   :hook (after-init . global-colorful-mode)
-  :init (setq colorful-use-prefix t)
-  :config (dolist (mode '(html-mode php-mode help-mode helpful-mode))
-            (add-to-list 'global-colorful-modes mode)))
+  :init (setq colorful-use-prefix t))
 
 ;; Highlight brackets according to their depth
 (use-package rainbow-delimiters
@@ -237,7 +236,7 @@ FACE defaults to inheriting from default and highlight."
 
 ;; Highlight uncommitted changes using VC
 (use-package diff-hl
-  :defines diff-hl-show-hunk-posframe-internal-border-color
+  :defines diff-hl-show-hunk-function diff-hl-show-hunk-posframe-internal-border-color
   :commands (diff-hl-flydiff-mode diff-hl-margin-mode)
   :custom-face
   (diff-hl-change ((t (:inherit custom-changed :foreground unspecified :background unspecified))))
@@ -249,20 +248,19 @@ FACE defaults to inheriting from default and highlight."
          (after-init . global-diff-hl-show-hunk-mouse-mode)
          (dired-mode . diff-hl-dired-mode)
          (magit-post-refresh . diff-hl-magit-post-refresh)
-         (after-load-theme . diff-hl-set-posframe-appearance))
+         ((after-init after-load-theme server-after-make-frame) . diff-hl-set-posframe))
   :custom
   (diff-hl-draw-borders nil)
   (diff-hl-update-async t)
   (diff-hl-global-modes '(not image-mode pdf-view-mode))
-  (diff-hl-show-hunk-function (if (childframe-workable-p)
-                                  'diff-hl-show-hunk-posframe
-                                'diff-hl-show-hunk-inline))
   :init
-  (defun diff-hl-set-posframe-appearance ()
-    "Set appearance of diff-hl-posframe."
-    (setq diff-hl-show-hunk-posframe-internal-border-color
+  (defun diff-hl-set-posframe ()
+    "Set display type and appearance of `diff-hl.'"
+    (setq diff-hl-show-hunk-function (if (childframe-workable-p)
+                                         'diff-hl-show-hunk-posframe
+                                       'diff-hl-show-hunk-inline)
+          diff-hl-show-hunk-posframe-internal-border-color
           (face-background 'posframe-border nil t)))
-  (diff-hl-set-posframe-appearance)
   :config
   ;; Set fringe style
   (setq-default fringes-outside-margins t)
@@ -277,53 +275,14 @@ FACE defaults to inheriting from default and highlight."
   (setq diff-hl-fringe-bmp-function 'my-diff-hl-fringe-bmp-function)
 
   ;; Highlight on-the-fly
-  (diff-hl-flydiff-mode 1)
+  (diff-hl-flydiff-mode 1))
 
-  ;; Fall back to the display margin since the fringe is unavailable in tty
-  (unless (display-graphic-p) (diff-hl-margin-mode 1)))
-
-;; Pulse current line
-(use-package pulse
-  :ensure nil
+;; Pulse highlight on selection
+(use-package pulsar
   :custom-face
-  (pulse-highlight-start-face ((t (:inherit region :background unspecified))))
-  (pulse-highlight-face ((t (:inherit region :background unspecified :extend t))))
-  :hook (((dumb-jump-after-jump imenu-after-jump) . my-recenter-and-pulse)
-         ((bookmark-after-jump magit-diff-visit-file next-error) . my-recenter-and-pulse-line))
-  :init
-  (with-no-warnings
-    (defun my-pulse-momentary-line (&rest _)
-      "Pulse the current line."
-      (pulse-momentary-highlight-one-line (point)))
-
-    (defun my-pulse-momentary (&rest _)
-      "Pulse the region or the current line."
-      (if (fboundp 'xref-pulse-momentarily)
-          (xref-pulse-momentarily)
-        (my-pulse-momentary-line)))
-
-    (defun my-recenter-and-pulse(&rest _)
-      "Recenter and pulse the region or the current line."
-      (recenter)
-      (my-pulse-momentary))
-
-    (defun my-recenter-and-pulse-line (&rest _)
-      "Recenter and pulse the current line."
-      (recenter)
-      (my-pulse-momentary-line))
-
-    (dolist (cmd '(recenter-top-bottom
-                   other-window switch-to-buffer
-                   aw-select toggle-window-split
-                   windmove-do-window-select
-                   pager-page-down pager-page-up
-                   treemacs-select-window))
-      (advice-add cmd :after #'my-pulse-momentary-line))
-
-    (dolist (cmd '(pop-to-mark-command
-                   pop-global-mark
-                   goto-last-change))
-      (advice-add cmd :after #'my-recenter-and-pulse))))
+  (pulsar-generic ((t :inherit region :extend t)))
+  :custom (pulsar-delay pulse-delay)
+  :hook (emacs-startup . pulsar-global-mode))
 
 ;; Pulse modified region
 (use-package goggles

@@ -232,6 +232,12 @@
 
 ;;(load-theme 'doom-one :no-confirm)
 
+(setq lsp-java-java-path "/usr/lib/jvm/java-25-openjdk/bin/java")
+(setq lsp-rust-analyzer-rustfmt-extra-args '("--edition=2024"))
+
+(use-package opencode
+  :straight (opencode :type git :host codeberg :repo "sczi/opencode.el"))
+
 (provide 'custom-post)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -1,6 +1,6 @@
 ;; init-funcs.el --- Define functions.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2018-2025 Vincent Zhang
+;; Copyright (C) 2018-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -270,7 +270,7 @@ the custom file."
       (write-region nil nil custom-file)
       (message "Saved %s (%s) to %s" variable value custom-file))))
 
-(defun too-long-file-p ()
+(defun file-too-long-p ()
   "Check whether the file is too long.
 
 Returns non-nil if the buffer size exceeds 500,000 bytes or has more than 10,000
@@ -570,22 +570,24 @@ Return the fastest package archive."
 
 ;; Rearrange split windows
 (defun split-window-horizontally-instead ()
-  "Kill any other windows and re-split such that the current window is on the top half of the frame."
+  "Kill other windows and split the current window is on the top half of the frame."
   (interactive)
-  (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+  (let* ((next-window (next-window))
+         (other-buffer (and next-window (window-buffer next-window))))
     (delete-other-windows)
     (split-window-horizontally)
     (when other-buffer
-      (set-window-buffer (next-window) other-buffer))))
+      (set-window-buffer next-window other-buffer))))
 
 (defun split-window-vertically-instead ()
-  "Kill any other windows and re-split such that the current window is on the left half of the frame."
+  "Kill other windows and split the current window is on left half of the frame."
   (interactive)
-  (let ((other-buffer (and (next-window) (window-buffer (next-window)))))
+  (let* ((next-window (next-window))
+         (other-buffer (and next-window (window-buffer next-window))))
     (delete-other-windows)
     (split-window-vertically)
     (when other-buffer
-      (set-window-buffer (next-window) other-buffer))))
+      (set-window-buffer next-window other-buffer))))
 
 
 

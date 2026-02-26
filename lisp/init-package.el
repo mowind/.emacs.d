@@ -1,6 +1,6 @@
 ;;; init-package.el --- Initialize package configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2006-2025 Vincent Zhang
+;; Copyright (C) 2006-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -34,20 +34,27 @@
   (require 'init-const)
   (require 'init-custom))
 
+;; Suppress warnings
+(defvar use-package-always-ensure)
+(defvar use-package-always-defer)
+(defvar use-package-expand-minimally)
+(defvar use-package-enable-imenu-support)
+
 (declare-function set-package-archives "init-funcs")
 (declare-function centaur-test-package-archives "init-funcs")
 
 ;; At first startup
-(when (and (file-exists-p centaur-custom-example-file)
-           (not (file-exists-p custom-file)))
+(when (and (not (file-exists-p custom-file))
+           (file-exists-p centaur-custom-example-file))
+  ;; Copy template
   (copy-file centaur-custom-example-file custom-file)
 
   ;; Test and select the fastest package archives
   (message "Testing connection... Please wait a moment.")
-  (set-package-archives (centaur-test-package-archives 'no-chart)))
+  (set-package-archives (centaur-test-package-archives 'nochart)))
 
 ;; Load `custom-file'
-(and (file-readable-p custom-file) (load custom-file))
+(load custom-file 'noerror)
 
 ;; Load custom-post file
 (defun load-custom-post-file ()
@@ -62,9 +69,12 @@
 ;; HACK: DO NOT save `package-selected-packages' to `custom-file'
 ;; @see https://github.com/jwiegley/use-package/issues/383#issuecomment-247801751
 (defun my-package--save-selected-packages (&optional value)
-  "Set `package-selected-packages' to VALUE but don't save to option `custom-file'."
-  (when value
-    (setq package-selected-packages value))
+  "Set `package-selected-packages' to VALUE but don't save to custom.el."
+  (when (or value after-init-time)
+    ;; It is valid to set it to nil, for example when the last package
+    ;; is uninstalled.  But it shouldn't be done at init time, to
+    ;; avoid overwriting configurations that haven't yet been loaded.
+    (setq package-selected-packages (sort value #'string<)))
   (unless after-init-time
     (add-hook 'after-init-hook #'my-package--save-selected-packages)))
 (advice-add 'package--save-selected-packages :override #'my-package--save-selected-packages)
@@ -137,6 +147,10 @@
 (unless (bound-and-true-p package--initialized) ; To avoid warnings in 27
   (setq package-enable-at-startup nil)          ; To prevent initializing twice
   (package-initialize))
+
+;; Prettify package list
+(set-face-attribute 'package-status-available nil :inherit 'font-lock-string-face)
+(set-face-attribute 'package-description nil :inherit 'font-lock-comment-face)
 
 ;; Setup `use-package'
 (unless (package-installed-p 'use-package)

@@ -9,7 +9,7 @@
 ;; (setq centaur-mail-address "user@email.com")   ; Email address
 ;; (setq centaur-proxy "127.0.0.1:7897")          ; HTTP/HTTPS proxy
 ;; (setq centaur-socks-proxy "127.0.0.1:7897")    ; SOCKS proxy
-;; (setq centaur-server nil)                      ; Enable `server-mode' or not: t or nil
+
 ;; (setq centaur-use-exec-path-from-shell nil)    ; Use `exec-path-from-shell' or not. If using emacs-plus with path ejection, set to nil
 ;; (setq centaur-icon nil)                        ; Display icons or not: t or nil
 ;; (setq centaur-package-archives 'melpa)         ; Package repo: melpa, bfsu, iscas, netease, sjtu, tencent, tuna or ustc
@@ -104,7 +104,7 @@
 ;; Display on the specified monitor
 ;; (when (and (> (length (display-monitor-attributes-list)) 1)
 ;;            (> (display-pixel-width) 1920))
-;;   (set-frame-parameter nil 'left 1920))
+;;   (set-frame-parameter nil 'left 288))
 
 ;; (put 'cl-destructuring-bind 'lisp-indent-function 'defun)
 ;; (put 'treemacs-create-theme 'lisp-indent-function 'defun)

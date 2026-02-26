@@ -1,6 +1,6 @@
 ;; init-lsp.el --- Initialize LSP configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2018-2025 Vincent Zhang
+;; Copyright (C) 2018-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -45,7 +45,7 @@
                              (eglot-ensure))))
             ((markdown-mode yaml-mode yaml-ts-mode) . eglot-ensure))
      :init (setq eglot-autoshutdown t
-                 eglot-events-buffer-size 0
+                 eglot-events-buffer-config '(:size 0 :format 'short)
                  eglot-send-changes-idle-time 0.5))
 
    (use-package consult-eglot

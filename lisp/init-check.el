@@ -1,6 +1,6 @@
 ;; init-check.el --- Initialize check configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2009-2025 Vincent Zhang
+;; Copyright (C) 2009-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -51,8 +51,12 @@
 ;; Display Flymake errors with overlays
 (use-package flyover
   :diminish
-  :hook flymake-mode
-  :custom (flyover-checkers '(flymake)))
+  :custom
+  (flyover-checkers '(flymake))
+  (flyover-background-lightness 60)
+  (flyover-icon-background-tint-percent 50)
+  (flyover-display-mode 'hide-on-same-line)
+  :hook flymake-mode)
 
 (provide 'init-check)
 

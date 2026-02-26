@@ -1,6 +1,6 @@
 ;; init-base.el --- Better default configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2006-2025 Vincent Zhang
+;; Copyright (C) 2006-2026 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -84,10 +84,9 @@
 (use-package gcmh
   :diminish
   :hook (emacs-startup . gcmh-mode)
-  :init
-  (setq gcmh-idle-delay 'auto
-        gcmh-auto-idle-delay-factor 10
-        gcmh-high-cons-threshold #x1000000)) ; 16MB
+  :init (setq gcmh-idle-delay 'auto
+              gcmh-auto-idle-delay-factor 10
+              gcmh-high-cons-threshold #x4000000)) ; 64MB
 
 ;; Set UTF-8 as the default coding system
 (when (fboundp 'set-charset-priority)
@@ -117,8 +116,9 @@
 
 ;; Start server
 (use-package server
-  :if centaur-server
-  :hook (after-init . server-mode))
+  :hook (emacs-startup . (lambda ()
+			               (unless server-mode
+                             (server-mode 1)))))
 
 ;; Save place
 (use-package saveplace
@@ -218,15 +218,6 @@
       sentence-end-double-space nil
       word-wrap-by-category t)
 
-;; Asynchronous processing
-(use-package async
-  :diminish (async-bytecomp-package-mode dired-async-mode)
-  :functions (async-bytecomp-package-mode dired-async-mode)
-  :init
-  (unless sys/win32p
-    (async-bytecomp-package-mode 1))
-  (dired-async-mode 1))
-
 ;; Frame
 (when (display-graphic-p)
   ;; Frame maximized on startup
@@ -246,7 +237,7 @@
              ("C-M-<up>"        . centaur-frame-top-half)
              ("C-M-<down>"      . centaur-frame-bottom-half))
 
-  ;; Frame transparence
+  ;; Frame transparency
   (use-package transwin
     :bind (("C-M-9" . transwin-inc)
            ("C-M-8" . transwin-dec)
@@ -257,6 +248,8 @@
 
 ;; Child frame
 (use-package posframe
+  :custom-face
+  (child-frame-border ((t (:inherit posframe-border))))
   :hook (after-load-theme . posframe-delete-all)
   :init
   (defface posframe-border
