@@ -214,7 +214,7 @@
   :hook(;; show org ediffs unfolded
         (ediff-prepare-buffer . outline-show-all)
         ;; restore window layout when done
-        (ediff-quit . winner-undo))
+        (ediff-quit . tab-bar-history-back))
   :config
   (setq ediff-window-setup-function 'ediff-setup-windows-plain
         ediff-split-window-function 'split-window-horizontally
@@ -449,6 +449,10 @@
 ;; Hanlde minified code
 (use-package so-long
   :hook (after-init . global-so-long-mode))
+
+;; Better performance via tramp
+(use-package tramp-hlo
+  :hook (after-init . tramp-hlo-setup))
 
 (provide 'init-edit)
 
