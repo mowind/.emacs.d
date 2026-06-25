@@ -46,6 +46,7 @@
 /tramp
 README.html
 .agent-shell/
+agent/
 anaconda-mode/
 auto-save-list/
 cnfonts/

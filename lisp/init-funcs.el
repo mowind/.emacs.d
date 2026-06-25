@@ -40,11 +40,13 @@
 (defvar socks-noproxy)
 (defvar socks-server)
 
+(declare-function apheleia-global-mode "apheleia")
 (declare-function browse-url-file-url "browse-url")
 (declare-function browse-url-interactive-arg "browse-url")
 (declare-function chart-bar-quickie "chart")
 (declare-function consult-theme "ext:consult")
 (declare-function nerd-icons-install-fonts "ext:nerd-icons")
+(declare-function winner-undo "winner")
 (declare-function xwidget-buffer "xwidget")
 (declare-function xwidget-webkit-current-session "xwidget")
 
@@ -393,7 +395,9 @@ Return the fastest package archive."
   "Refresh package contents and update all packages."
   (interactive)
   (message "Updating packages...")
+  (and (fboundp 'apheleia-global-mode) (apheleia-global-mode -1))
   (package-upgrade-all)
+  (and (fboundp 'apheleia-global-mode) (apheleia-global-mode 1))
   (message "Updating packages...done"))
 (defalias 'centaur-update-packages #'update-packages)
 
@@ -673,6 +677,15 @@ Return the fastest package archive."
       (set-frame-parameter nil 'fullscreen nil)
       (set-frame-position nil left top)
       (set-frame-size nil width height t))))
+
+(defun centaur-recover-layout ()
+  "Recover window layout."
+  (cond
+   ((bound-and-true-p tab-bar-history-mode)
+    (tab-bar-history-back))
+   ((bound-and-true-p winner-mode)
+    (winner-undo))
+   (t (user-error "Unable to recover layout"))))
 
 
 
