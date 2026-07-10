@@ -235,8 +235,15 @@
 (setq lsp-java-java-path "/usr/lib/jvm/java-25-openjdk/bin/java")
 (setq lsp-rust-analyzer-rustfmt-extra-args '("--edition=2024"))
 
-(use-package opencode
-  :straight (opencode :type git :host codeberg :repo "sczi/opencode.el"))
+(use-package ghostel
+  :vc (:url "https://github.com/dakra/ghostel" :rev :newest))
+
+(use-package agent-shell
+  :ensure t
+  :straight '(agent-sell
+              :type git
+              :host github
+              :repo "xenodium/agent-shell"))
 
 (provide 'custom-post)
 
