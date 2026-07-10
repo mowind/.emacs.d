@@ -47,20 +47,18 @@
                                                       (t 100))))
 
     ;; Set mode-line font
-    ;; (cl-loop for font in '("SF Mono" "Menlo" "SF Pro Display" "Helvetica")
+    ;; (cl-loop for font in '("Arial" "Helvetica" "Times New Roman")
     ;;          when (font-available-p font)
     ;;          return (progn
-    ;;                   (set-face-attribute 'mode-line nil :family font :height 120)
-    ;;                   (when (facep 'mode-line-active)
-    ;;                     (set-face-attribute 'mode-line-active nil :family font :height 120))
-    ;;                   (set-face-attribute 'mode-line-inactive nil :family font :height 120)))
+    ;;                   (set-face-attribute 'mode-line nil :family font :inherit 'variable-pitch)
+    ;;                   (set-face-attribute 'mode-line-inactive nil :family font :inherit 'variable-pitch)))
 
     ;; Specify font for all unicode characters
     (cl-loop for font in '("Apple Symbols" "Segoe UI Symbol" "Symbola" "Symbol")
              when (font-available-p font)
              return (set-fontset-font t 'symbol (font-spec :family font) nil 'prepend))
 
-    ;; Emoji
+    ;; Specify font for Emoji characters
     (cl-loop for font in '("Noto Color Emoji" "Apple Color Emoji" "Segoe UI Emoji")
              when (font-available-p font)
              return (set-fontset-font t 'emoji (font-spec :family font) nil 'prepend))
@@ -96,6 +94,7 @@
 ;; Misc.
 ;; (setq confirm-kill-emacs 'y-or-n-p)
 ;; (setq package-check-signature nil)
+;; (setq trusted-content ':all)
 
 ;; Enable proxy
 ;; (enable-http-proxy)
@@ -107,6 +106,7 @@
 ;;   (set-frame-parameter nil 'left 288))
 
 ;; (put 'cl-destructuring-bind 'lisp-indent-function 'defun)
+;; (put 'pdf-view-create-image 'lisp-indent-function 'defun)
 ;; (put 'treemacs-create-theme 'lisp-indent-function 'defun)
 
 ;; For compat
